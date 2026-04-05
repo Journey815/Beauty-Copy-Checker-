@@ -555,7 +555,8 @@ function updateMetadata() {
     const detailEl = document.getElementById('metaDetail');
     if (detailEl && form.countries) {
       const regs = form.countries.map(c => countryNames[c] || c).join(' · ');
-      detailEl.textContent = `${typeNames[form.contentType] || ''} | ${form.category || ''} | ${regs}`;
+      const catDisplay = Array.isArray(form.category) ? form.category.join(', ') : (form.category || '');
+      detailEl.textContent = `${typeNames[form.contentType] || ''} | ${catDisplay} | ${regs}`;
     }
 
     const timeEl = document.getElementById('metaTime');

@@ -5,7 +5,7 @@
 // State
 let selectedType = 'label';
 let selectedCountries = ['us', 'kr'];
-let selectedCategory = null;
+let selectedCategories = [];
 
 // Type selection
 function selectType(card) {
@@ -44,13 +44,22 @@ function updateCountrySummary() {
   document.getElementById('sum-countries').textContent = selectedCountries.map(c => names[c]).join(', ') || '없음';
 }
 
-// Category selection
+// Category selection (multi-select)
 function selectChip(chip) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-  chip.classList.add('selected');
-  selectedCategory = chip.dataset.cat;
-  document.getElementById('sb-cat-val').textContent = chip.textContent;
-  document.getElementById('sum-category').textContent = chip.textContent;
+  const cat = chip.dataset.cat;
+  chip.classList.toggle('selected');
+
+  if (chip.classList.contains('selected')) {
+    if (!selectedCategories.includes(cat)) selectedCategories.push(cat);
+  } else {
+    selectedCategories = selectedCategories.filter(c => c !== cat);
+  }
+
+  const selectedChips = document.querySelectorAll('.chip.selected');
+  const names = Array.from(selectedChips).map(c => c.textContent);
+  const display = names.length === 0 ? '미선택' : names.join(', ');
+  document.getElementById('sb-cat-val').textContent = names.length ? `${names.length}개 선택` : '미선택';
+  document.getElementById('sum-category').textContent = display;
   checkReady();
 }
 
@@ -67,7 +76,7 @@ function updateCounter() {
 // Check ready state
 function checkReady() {
   const hasCountry = selectedCountries.length > 0;
-  const hasCategory = !!selectedCategory;
+  const hasCategory = selectedCategories.length > 0;
   const hasInput = document.getElementById('copyInput').value.trim().length > 10;
   const btn = document.getElementById('analyzeBtn');
   const msg = document.getElementById('actionBarMsg');
@@ -255,7 +264,7 @@ async function startAnalysis() {
     text: document.getElementById('copyInput').value,
     contentType: selectedType,
     countries: [...selectedCountries],
-    category: selectedCategory,
+    category: [...selectedCategories],
     dimensions: null
   };
 
