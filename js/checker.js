@@ -240,11 +240,31 @@ document.addEventListener('DOMContentLoaded', () => {
       else if (areaSqIn <= 400) minFont = '1/4 in (6.4mm)';
       else minFont = '1/2 in (12.7mm)';
 
+      // Barcode scale recommendation based on available space
+      let barcodeRec = '', barcodeNote = '';
+      if (areaSqIn <= 5) {
+        barcodeRec = '80%';
+        barcodeNote = '최소 허용 배율. Quiet zone 확보에 주의';
+      } else if (areaSqIn <= 15) {
+        barcodeRec = '80–90%';
+        barcodeNote = '공간 제약 시 축소 가능, 인쇄 품질 확인 필요';
+      } else if (areaSqIn <= 50) {
+        barcodeRec = '90–100%';
+        barcodeNote = '표준 크기 권장';
+      } else if (areaSqIn <= 200) {
+        barcodeRec = '100–120%';
+        barcodeNote = '표준~확대. 스캔 안정성 우수';
+      } else {
+        barcodeRec = '100–150%';
+        barcodeNote = '대형 패키지. 여유 있게 배치 권장';
+      }
+
       const resultEl = document.getElementById('pdpResult');
       resultEl.style.display = 'block';
       document.getElementById('pdpResultText').innerHTML =
         `PDP 면적 <strong>${areaCm2.toFixed(1)} cm²</strong> (${areaSqIn.toFixed(1)} sq in) 기준<br>
-         순함량 폰트 최소 높이: <strong>${minFont}</strong> (21 CFR 701.13)`;
+         순함량 폰트 최소 높이: <strong>${minFont}</strong> (21 CFR 701.13)<br>
+         바코드 권장 배율: <strong>${barcodeRec}</strong> — ${barcodeNote} (GS1 최소 80%)`;
     }
   }
 
