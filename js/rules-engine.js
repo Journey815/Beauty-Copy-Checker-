@@ -36,6 +36,35 @@ async function loadRuleData() {
 }
 
 // ============================================================
+// Pin position presets (based on typical label layout, % of image)
+// ============================================================
+const PIN_POS = {
+  tagline:      { x: 50, y: 21 },   // 제품 태그라인 영역
+  description:  { x: 50, y: 27 },   // 제품 설명 (한국어)
+  descriptionB: { x: 72, y: 29 },   // 제품 설명 2번째 줄
+  netWeight:    { x: 25, y: 35 },   // 순함량 영역
+  netWeightR:   { x: 75, y: 35 },   // 순함량 우측
+  ingredients:  { x: 50, y: 45 },   // 성분표 상단
+  ingredientMid:{ x: 65, y: 50 },   // 성분표 중간
+  ingredientBot:{ x: 30, y: 54 },   // 성분표 하단
+  howToUse:     { x: 50, y: 63 },   // 사용법
+  manufacturer: { x: 25, y: 73 },   // 제조사 정보
+  warnings:     { x: 50, y: 80 },   // 경고문
+  pao:          { x: 15, y: 84 },   // PAO 심볼
+  recycling:    { x: 26, y: 84 },   // 재활용 심볼
+  barcode:      { x: 80, y: 85 },   // 바코드
+};
+
+// Offset counter to prevent pin overlap in same area
+let pinOffsetCounter = {};
+function getPinPos(key) {
+  const pos = PIN_POS[key] || { x: 50, y: 50 };
+  const count = pinOffsetCounter[key] || 0;
+  pinOffsetCounter[key] = count + 1;
+  return { pinX: pos.x + count * 5, pinY: pos.y + count * 3 };
+}
+
+// ============================================================
 // Check functions
 // ============================================================
 
@@ -58,18 +87,18 @@ function detectDrugClaims(text, countries) {
         const contextStart = Math.max(0, idx - 20);
         const contextEnd = Math.min(text.length, idx + lowerPattern.length + 20);
         const context = text.substring(contextStart, contextEnd);
+        const pin = getPinPos('description');
         issues.push({
           id: ++issueId,
           type: 'critical',
           title: `Drug Claim 표현 감지 — "${pattern}"`,
           country: countries.includes('us') ? ['🇺🇸'] : ['🇪🇺'],
           rule: 'US-LAB-004 · FD&C Act 201(g)(1)',
-          location: '텍스트 내 감지',
+          location: '제품 설명문',
           current: `"...${context}..."`,
           fix: `"${pattern}" 표현을 cosmetic claim으로 교체하세요`,
           assignee: '문안검토 에이전시',
-          pinX: 50 + Math.random() * 30,
-          pinY: 20 + Math.random() * 40,
+          ...pin,
         });
         break; // one critical per pattern group is enough
       }
@@ -78,18 +107,18 @@ function detectDrugClaims(text, countries) {
     for (const pattern of drugClaimPatterns.patterns.en.warning) {
       const lowerPattern = pattern.toLowerCase();
       if (lowerText.indexOf(lowerPattern) !== -1) {
+        const pin = getPinPos('tagline');
         issues.push({
           id: ++issueId,
           type: 'warning',
           title: `효능 표현 검토 필요 — "${pattern}"`,
           country: ['🇺🇸'],
           rule: 'US-WEB-001 · FD&C Act',
-          location: '텍스트 내 감지',
+          location: '태그라인 / 제품 설명',
           current: `"${pattern}" 표현이 포함되어 있습니다`,
           fix: '맥락에 따라 cosmetic claim으로 허용될 수 있으나, drug claim과 결합 시 문제 소지',
           assignee: '문안검토 에이전시',
-          pinX: 50 + Math.random() * 30,
-          pinY: 20 + Math.random() * 40,
+          ...pin,
         });
       }
     }
@@ -103,36 +132,36 @@ function detectDrugClaims(text, countries) {
         const contextStart = Math.max(0, idx - 15);
         const contextEnd = Math.min(text.length, idx + pattern.length + 15);
         const context = text.substring(contextStart, contextEnd);
+        const pin = getPinPos('description');
         issues.push({
           id: ++issueId,
           type: 'critical',
           title: `식약처 금지 표현 감지 — "${pattern}"`,
           country: ['🇰🇷'],
           rule: 'KR-AD-001 · 화장품법 제13조',
-          location: '한국어 텍스트 내 감지',
+          location: '한국어 제품 설명',
           current: `"...${context}..."`,
           fix: `"${pattern}" 표현은 의약품 오인 표현으로 금지됩니다. cosmetic claim으로 교체하세요`,
           assignee: '문안검토 에이전시',
-          pinX: 20 + Math.random() * 30,
-          pinY: 20 + Math.random() * 40,
+          ...pin,
         });
       }
     }
 
     for (const pattern of drugClaimPatterns.patterns.ko.warning) {
       if (text.includes(pattern)) {
+        const pin = getPinPos('descriptionB');
         issues.push({
           id: ++issueId,
           type: 'warning',
           title: `한국어 효능 표현 검토 — "${pattern}"`,
           country: ['🇰🇷'],
           rule: 'KR-AD-002 · 화장품법 제13조',
-          location: '한국어 텍스트 내 감지',
+          location: '한국어 제품 설명',
           current: `"${pattern}" 표현이 포함되어 있습니다`,
           fix: '기능성 화장품 심사 필요 여부 또는 과대 광고 해당 여부를 확인하세요',
           assignee: '문안검토 에이전시',
-          pinX: 20 + Math.random() * 30,
-          pinY: 20 + Math.random() * 40,
+          ...pin,
         });
       }
     }
@@ -173,6 +202,7 @@ function validateINCI(text) {
       // Check if this ingredient is a known misspelling
       const misspellings = entry.common_misspellings.map(m => m.toLowerCase());
       if (misspellings.includes(ingredient.toLowerCase()) && ingredient.toLowerCase() !== entry.inci_name.toLowerCase()) {
+        const pin = getPinPos('ingredientMid');
         issues.push({
           id: 0,
           type: 'warning',
@@ -183,8 +213,7 @@ function validateINCI(text) {
           current: `"${ingredient}"`,
           fix: `"${entry.inci_name}" — INCI DB 공식 명칭 (${entry.korean_name})`,
           assignee: '디자이너',
-          pinX: 60 + Math.random() * 20,
-          pinY: 40 + Math.random() * 15,
+          ...pin,
         });
       }
 
@@ -195,6 +224,7 @@ function validateINCI(text) {
           // Avoid duplicates from misspelling check
           const alreadyFound = issues.some(i => i.current && i.current.includes(ingredient));
           if (!alreadyFound) {
+            const pin = getPinPos('ingredientMid');
             issues.push({
               id: 0,
               type: 'warning',
@@ -205,8 +235,7 @@ function validateINCI(text) {
               current: `"${ingredient}"`,
               fix: `"${entry.inci_name}"이(가) 의도한 성분인지 확인하세요`,
               assignee: '디자이너',
-              pinX: 60 + Math.random() * 20,
-              pinY: 40 + Math.random() * 15,
+              ...pin,
             });
           }
         }
@@ -257,7 +286,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: 'INCI 성분 목록이 확인됨',
           fix: '기준 충족.',
           assignee: null,
-          pinX: 65, pinY: 45,
+          ...getPinPos('ingredients'),
         });
       } else {
         issues.push({
@@ -269,7 +298,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: '"INGREDIENTS:" 섹션이 감지되지 않았습니다',
           fix: '모든 성분을 INCI 명칭으로 함량 내림차순으로 나열하세요',
           assignee: '디자이너',
-          pinX: 65, pinY: 45,
+          ...getPinPos('ingredients'),
         });
       }
     }
@@ -288,7 +317,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: 'ml/g 단위만 표기됨 (oz 누락)',
           fix: 'fl oz 또는 oz 단위를 병기하세요 (예: 150 ml / 5 fl oz)',
           assignee: '디자이너',
-          pinX: 75, pinY: 34,
+          ...getPinPos('netWeight'),
         });
       } else if (hasMetric && hasOz) {
         issues.push({
@@ -300,7 +329,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: 'oz/fl oz + ml/g 이중 단위 확인됨',
           fix: '기준 충족.',
           assignee: null,
-          pinX: 75, pinY: 34,
+          ...getPinPos('netWeight'),
         });
       }
     }
@@ -308,7 +337,6 @@ function checkRequiredFields(text, contentType, countries) {
     // US-LAB-003: US distributor/manufacturer address
     if (countries.includes('us')) {
       const hasUSAddress = /\b[A-Z]{2}\s+\d{5}\b/.test(text) || /\bUSA\b/.test(text);
-      const hasDistributor = /distributed\s+by/i.test(text) || /manufactured\s+for/i.test(text);
       if (!hasUSAddress) {
         issues.push({
           id: 0, type: 'critical',
@@ -319,7 +347,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: '미국 주소 형식 (City, State ZIP, USA)이 감지되지 않았습니다',
           fix: '"Distributed by: [Company], [City], [State] [ZIP], USA" 추가 필요',
           assignee: '제조사',
-          pinX: 25, pinY: 70,
+          ...getPinPos('manufacturer'),
         });
       } else {
         issues.push({
@@ -331,7 +359,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: '미국 주소 형식이 확인됨',
           fix: '기준 충족.',
           assignee: null,
-          pinX: 25, pinY: 70,
+          ...getPinPos('manufacturer'),
         });
       }
     }
@@ -352,7 +380,7 @@ function checkRequiredFields(text, contentType, countries) {
             current: 'AHA 성분이 포함되어 있으나 "Sunburn Alert" 경고문이 없습니다',
             fix: '"Sunburn Alert: This product contains an alpha hydroxy acid (AHA)..." 경고문 추가 필수',
             assignee: '제조사',
-            pinX: 50, pinY: 80,
+            ...getPinPos('warnings'),
           });
         }
       }
@@ -370,7 +398,7 @@ function checkRequiredFields(text, contentType, countries) {
         current: '경고문 섹션이 확인됨',
         fix: '기준 충족.',
         assignee: null,
-        pinX: 50, pinY: 82,
+        ...getPinPos('warnings'),
       });
     }
   }
@@ -389,7 +417,7 @@ function checkRequiredFields(text, contentType, countries) {
           current: `"${kw}" 표현이 포함되어 있습니다`,
           fix: '이 기능을 표방하려면 식약처 기능성 화장품 심사가 필요합니다',
           assignee: '제조사',
-          pinX: 30, pinY: 25,
+          ...getPinPos('descriptionB'),
         });
       }
     }
@@ -424,7 +452,7 @@ function validatePDPFontSize(dimensions) {
         current: `현재 ${dimensions.fontSizeMm}mm (PDP ${area.toFixed(1)} sq in)`,
         fix: `PDP 면적 기준 최소 ${minLabel} 이상 필요`,
         assignee: '디자이너',
-        pinX: 25, pinY: 34,
+        ...getPinPos('netWeightR'),
       });
     } else {
       issues.push({
@@ -436,7 +464,7 @@ function validatePDPFontSize(dimensions) {
         current: `${dimensions.fontSizeMm}mm (최소 ${minLabel})`,
         fix: '기준 충족.',
         assignee: null,
-        pinX: 25, pinY: 34,
+        ...getPinPos('netWeightR'),
       });
     }
   } else {
@@ -467,6 +495,7 @@ function validatePDPFontSize(dimensions) {
  */
 function runAllChecks(formData) {
   const { text, contentType, countries, category, dimensions } = formData;
+  pinOffsetCounter = {}; // Reset pin positions for each analysis
   let allIssues = [];
 
   // 1. Drug claim detection

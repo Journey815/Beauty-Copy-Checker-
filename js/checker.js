@@ -102,18 +102,20 @@ function checkReady() {
 // Sample text
 function loadSampleText() {
   const sample = `AQUA GLOW SERUM
-KOREAN SKINCARE INNOVATION — HYDRATING & BRIGHTENING
+HYDRATING & BRIGHTENING
 
-INGREDIENTS: Aqua, Glycerin, Niacinamide, Butylene Glycol, Panthenol, Sodium Hyaluronate, Centella Asiatica Extract, Aloe Barbadensis Leaf Juice, Ceramide NP, Betaine, Allantoin, Carbomer, Tromethamine, PEG-60 Hydrogenated Castor Oil, 1,2-Hexanediol, Propanediol, Ethylhexylglycerin, Disodium EDTA, Adenosine, Citrus Aurantium Bergamia (Bergamot) Fruit Oil, Limonene, Linalool.
-
-이 세럼은 피부 재생을 도와 주름을 치료합니다. 하이드레이션 기능과 미백 효과로 피부 트러블을 완치시켜 드립니다.
+피부 재생을 도와 주름을 치료합니다
+트러블이 있는 피부를 완치시켜 드립니다
 
 Net Weight: 150ml
 
-MANUFACTURED FOR:
-SEOUL BEAUTY LAB Co., Ltd.
+INGREDIENTS: Aqua, Glycerln, Niacinamide, Hyaluronic Acid, Panthenol, Allantoin, Centella Asiatica Extract, Sodium PCA, Betaine, Ceramide NP, Adenosine, Tocopherol, Carbomer, Sodium Hydroxide, Ethylhexylglycerin, Phenoxyethanol, Limonene, Linalool, Fragrance.
 
-WARNINGS: For external use only. Avoid contact with eyes.`;
+HOW TO USE: 클렌징 후 적당량을 취하여 얼굴 전체에 부드럽게 펴 바르세요. Apply an appropriate amount to face.
+
+MANUFACTURER:
+SEOUL BEAUTY LAB Co., Ltd.
+123 Gangnam-daero, Seoul, Korea`;
   document.getElementById('copyInput').value = sample;
   updateCounter();
 }
