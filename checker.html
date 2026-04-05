@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카피 검토 시작 — Beauty Copy Checker</title>
+  <meta name="description" content="뷰티 카피를 입력하고 대상국을 선택하면 규제 준수 여부를 자동으로 검토합니다.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ============================================================
+       Checker Page
+       ============================================================ */
+
+    .checker-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* Sidebar */
+    .checker-sidebar {
+      border-right: 1px solid var(--border);
+      padding: 32px 28px;
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+      background: var(--bg);
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .sidebar-step:last-child {
+      border-bottom: none;
+    }
+
+    .sidebar-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--text-subtle);
+      transition: var(--t);
+    }
+
+    .sidebar-step.active .sidebar-step-num {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--bg);
+    }
+
+    .sidebar-step.done .sidebar-step-num {
+      background: var(--safe);
+      border-color: var(--safe);
+      color: white;
+    }
+
+    .sidebar-step.done .sidebar-step-num::after {
+      content: '✓';
+    }
+
+    .sidebar-step-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-subtle);
+      transition: var(--t);
+    }
+
+    .sidebar-step.active .sidebar-step-label {
+      color: var(--text);
+    }
+
+    .sidebar-step.done .sidebar-step-label {
+      color: var(--text-muted);
+    }
+
+    .sidebar-step-sub {
+      font-size: 11.5px;
+      color: var(--text-subtle);
+      margin-top: 2px;
+    }
+
+    .sidebar-tip {
+      margin-top: 32px;
+      padding: 16px;
+      background: var(--info-light);
+      border: 1px solid var(--info-border);
+      border-radius: var(--r-md);
+    }
+
+    .sidebar-tip-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--info);
+      margin-bottom: 6px;
+    }
+
+    .sidebar-tip-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Main Content */
+    .checker-main {
+      padding: 40px 48px;
+      max-width: 860px;
+    }
+
+    .checker-step-header {
+      margin-bottom: 32px;
+    }
+
+    .checker-step-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .checker-step-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .checker-step-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Type Cards */
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .type-card {
+      padding: 20px 20px;
+      background: var(--bg-white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      cursor: pointer;
+      transition: var(--t);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .type-card:hover {
+      border-color: var(--border-md);
+      background: var(--bg-subtle);
+    }
+
+    .type-card.selected {
+      border-color: var(--text);
+      background: var(--bg-white);
+    }
+
+    .type-card-check {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border-md);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--t);
+    }
+
+    .type-card.selected .type-card-check {
+      background: var(--text);
+      border-color: var(--text);
+    }
+
+    .type-card.selected .type-card-check::after {
+      content: '✓';
+      color: var(--bg);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .type-card-body {}
+
+    .type-card-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .type-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .type-card-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .type-card-phase {
+      display: inline-flex;
+      margin-top: 6px;
+      padding: 2px 7px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 10px;
+      color: var(--text-subtle);
+      font-weight: 600;
+    }
+
+    /* Country checkboxes */
+    .country-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .country-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--bg-white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      cursor: pointer;
+      transition: var(--t);
+      user-select: none;
+    }
+
+    .country-row:hover {
+      border-color: var(--border-md);
+    }
+
+    .country-row.selected {
+      border-color: var(--text);
+    }
+
+    .country-row-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .country-row-flag {
+      font-size: 20px;
+      width: 28px;
+      text-align: center;
+    }
+
+    .country-row-info {}
+
+    .country-row-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .country-row-reg {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .country-row-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .country-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border-md);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--t);
+      flex-shrink: 0;
+    }
+
+    .country-row.selected .country-checkbox {
+      background: var(--text);
+      border-color: var(--text);
+    }
+
+    .country-row.selected .country-checkbox::after {
+      content: '✓';
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Category chips */
+    .category-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .chip {
+      padding: 9px 18px;
+      background: var(--bg-white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--t);
+      user-select: none;
+    }
+
+    .chip:hover {
+      border-color: var(--border-md);
+    }
+
+    .chip.selected {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    /* Text input */
+    .input-area {
+      margin-bottom: 32px;
+    }
+
+    .input-area-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .text-counter {
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    .copy-textarea {
+      width: 100%;
+      height: 220px;
+      padding: 16px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      font-size: 14px;
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.65;
+      resize: vertical;
+      transition: var(--t);
+    }
+
+    .copy-textarea:focus {
+      outline: none;
+      border-color: var(--text);
+      box-shadow: 0 0 0 3px rgba(10,10,10,0.06);
+    }
+
+    .copy-textarea::placeholder {
+      color: var(--text-subtle);
+    }
+
+    /* Dimensions section */
+    .dimensions-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 0;
+      transition: var(--t);
+      user-select: none;
+    }
+
+    .dimensions-toggle:hover {
+      border-color: var(--border-md);
+    }
+
+    .dimensions-toggle-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--bg-subtle);
+      border-radius: var(--r-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: var(--t-md);
+    }
+
+    .dimensions-toggle.open .dimensions-toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    .dimensions-panel {
+      display: none;
+      margin-top: 12px;
+      padding: 24px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .dimensions-panel.open {
+      display: block;
+    }
+
+    .dim-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 0;
+    }
+
+    .dim-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    /* Action bar */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+      position: sticky;
+      bottom: 0;
+      background: var(--bg);
+    }
+
+    .action-bar-left {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .action-bar-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(245,245,244,0.92);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .loading-icon {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--text);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .loading-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 280px;
+    }
+
+    .loading-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .loading-step.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .loading-step-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-md);
+      flex-shrink: 0;
+      transition: var(--t);
+    }
+
+    .loading-step.done .loading-step-dot {
+      background: var(--safe);
+    }
+
+    .loading-step.running .loading-step-dot {
+      background: var(--warning);
+      animation: pulse 0.8s ease infinite;
+    }
+
+    /* Image upload zone */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--r-lg);
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--t);
+      background: var(--bg-white);
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+      border-color: var(--text);
+      background: var(--bg-subtle);
+    }
+
+    .upload-zone-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .upload-zone-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .upload-zone-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .upload-zone-btn {
+      display: inline-flex;
+      padding: 8px 20px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--t);
+    }
+
+    .upload-zone-btn:hover {
+      background: var(--border);
+    }
+
+    .upload-preview {
+      display: none;
+      position: relative;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+    }
+
+    .upload-preview.visible {
+      display: block;
+    }
+
+    .upload-preview img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: contain;
+      display: block;
+      background: #EAEAE8;
+      padding: 16px;
+    }
+
+    .upload-preview-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--border);
+    }
+
+    .upload-preview-info {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .upload-preview-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .upload-remove-btn {
+      padding: 5px 14px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: var(--font);
+      transition: var(--t);
+    }
+
+    .upload-remove-btn:hover {
+      border-color: var(--critical);
+      color: var(--critical);
+    }
+
+    /* Section divider inside form */
+    .form-section {
+      padding-bottom: 36px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-section:last-child {
+      border-bottom: none;
+    }
+
+    .form-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .form-section-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .required-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: var(--critical);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* Summary panel */
+    .summary-panel {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      margin-bottom: 28px;
+      display: none;
+    }
+
+    .summary-panel.visible {
+      display: block;
+    }
+
+    .summary-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-key {
+      color: var(--text-muted);
+    }
+
+    .summary-val {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-icon"></div>
+    <div class="loading-title">AI 규제 분석 중...</div>
+    <div class="loading-steps" id="loadingSteps">
+      <div class="loading-step" id="ls-0">
+        <div class="loading-step-dot"></div>
+        <span>텍스트 언어 감지 및 분리</span>
+      </div>
+      <div class="loading-step" id="ls-1">
+        <div class="loading-step-dot"></div>
+        <span>Drug Claim 패턴 매칭</span>
+      </div>
+      <div class="loading-step" id="ls-2">
+        <div class="loading-step-dot"></div>
+        <span>INCI 성분 DB 대조</span>
+      </div>
+      <div class="loading-step" id="ls-3">
+        <div class="loading-step-dot"></div>
+        <span>미국 FDA/MoCRA 규제 검증</span>
+      </div>
+      <div class="loading-step" id="ls-4">
+        <div class="loading-step-dot"></div>
+        <span>오탈자 및 텍스트 품질 검사</span>
+      </div>
+      <div class="loading-step" id="ls-5">
+        <div class="loading-step-dot"></div>
+        <span>결과 리포트 생성</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo-pill">
+      <span class="logo-accent"></span>
+      BeautyCopyChecker
+    </a>
+    <nav class="header-nav">
+      <a href="index.html">← 홈으로</a>
+      <span style="color: var(--border); font-size: 18px;">|</span>
+      <a href="results.html" style="font-size: 13px; color: var(--text-muted);">데모 결과 보기</a>
+    </nav>
+  </header>
+
+  <div class="checker-layout">
+
+    <!-- Sidebar -->
+    <aside class="checker-sidebar">
+      <div class="sidebar-title">검토 단계</div>
+
+      <div class="sidebar-step done" onclick="scrollToSection('s-type')">
+        <div class="sidebar-step-num">1</div>
+        <div>
+          <div class="sidebar-step-label">콘텐츠 유형</div>
+          <div class="sidebar-step-sub" id="sb-type-val">패키지 라벨</div>
+        </div>
+      </div>
+
+      <div class="sidebar-step done" onclick="scrollToSection('s-country')">
+        <div class="sidebar-step-num">2</div>
+        <div>
+          <div class="sidebar-step-label">대상국 선택</div>
+          <div class="sidebar-step-sub" id="sb-country-val">🇺🇸 🇰🇷 선택됨</div>
+        </div>
+      </div>
+
+      <div class="sidebar-step active" onclick="scrollToSection('s-category')">
+        <div class="sidebar-step-num">3</div>
+        <div>
+          <div class="sidebar-step-label">제품 카테고리</div>
+          <div class="sidebar-step-sub" id="sb-cat-val">미선택</div>
+        </div>
+      </div>
+
+      <div class="sidebar-step" onclick="scrollToSection('s-input')">
+        <div class="sidebar-step-num">4</div>
+        <div>
+          <div class="sidebar-step-label">카피 입력</div>
+          <div class="sidebar-step-sub" id="sb-input-val">0자 입력됨</div>
+        </div>
+      </div>
+
+      <div class="sidebar-step" onclick="scrollToSection('s-image')">
+        <div class="sidebar-step-num">5</div>
+        <div>
+          <div class="sidebar-step-label">라벨 이미지 (선택)</div>
+          <div class="sidebar-step-sub" id="sb-image-val">미첨부</div>
+        </div>
+      </div>
+
+      <div class="sidebar-step" onclick="scrollToSection('s-dims')">
+        <div class="sidebar-step-num">6</div>
+        <div>
+          <div class="sidebar-step-label">패키지 치수 (선택)</div>
+          <div class="sidebar-step-sub">PDP 면적 기반 폰트 규정</div>
+        </div>
+      </div>
+
+      <div class="sidebar-tip">
+        <div class="sidebar-tip-title">💡 팁</div>
+        <div class="sidebar-tip-text">패키지 라벨 검토 시 치수(가로×세로)를 입력하면 순함량 폰트 최소 크기 규정(21 CFR 701.13)도 함께 검증합니다.</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="checker-main">
+
+      <!-- Section: Content Type -->
+      <div class="form-section" id="s-type">
+        <div class="checker-step-header">
+          <span class="checker-step-tag">Step 1</span>
+          <h2 class="checker-step-title">검토할 콘텐츠 유형을 <br>선택해주세요</h2>
+          <p class="checker-step-desc">유형에 따라 적용되는 규제 체크 항목이 달라집니다.</p>
+        </div>
+
+        <div class="type-grid">
+          <div class="type-card selected" data-type="label" onclick="selectType(this)">
+            <div class="type-card-check"></div>
+            <div class="type-card-body">
+              <div class="type-card-icon">📦</div>
+              <div class="type-card-title">제품 패키지 라벨</div>
+              <div class="type-card-desc">성분표(INCI), 사용법, 경고문, 용량/중량, 제조사 정보 등</div>
+            </div>
+          </div>
+          <div class="type-card" data-type="web" onclick="selectType(this)">
+            <div class="type-card-check"></div>
+            <div class="type-card-body">
+              <div class="type-card-icon">🖥️</div>
+              <div class="type-card-title">온라인 상세페이지</div>
+              <div class="type-card-desc">제품명, 효능 표현, 성분 목록, 주의사항, 광고문구</div>
+            </div>
+          </div>
+          <div class="type-card" data-type="ad" onclick="selectType(this)">
+            <div class="type-card-check"></div>
+            <div class="type-card-body">
+              <div class="type-card-icon">📢</div>
+              <div class="type-card-title">광고/마케팅 카피</div>
+              <div class="type-card-desc">SNS 광고문구, 배너 텍스트, 프로모션 카피</div>
+              <div class="type-card-phase">Phase 2</div>
+            </div>
+          </div>
+          <div class="type-card" data-type="doc" onclick="selectType(this)">
+            <div class="type-card-check"></div>
+            <div class="type-card-body">
+              <div class="type-card-icon">📋</div>
+              <div class="type-card-title">수출 인허가 서류</div>
+              <div class="type-card-desc">FDA 등록서, CPNP notification, 성분 신고서</div>
+              <div class="type-card-phase">Phase 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Country -->
+      <div class="form-section" id="s-country">
+        <div class="checker-step-header">
+          <span class="checker-step-tag">Step 2</span>
+          <h2 class="checker-step-title">수출 대상국을 <br>선택해주세요<span class="required-dot"></span></h2>
+          <p class="checker-step-desc">복수 선택 가능합니다. 선택한 국가의 규제만 적용됩니다.</p>
+        </div>
+
+        <div class="country-list">
+          <div class="country-row selected" data-country="us" onclick="toggleCountry(this)">
+            <div class="country-row-left">
+              <div class="country-row-flag">🇺🇸</div>
+              <div class="country-row-info">
+                <div class="country-row-name">미국</div>
+                <div class="country-row-reg">FDA / MoCRA (2022) — 21 CFR Part 701</div>
+              </div>
+            </div>
+            <div class="country-row-right">
+              <span class="badge badge-safe">MVP</span>
+              <div class="country-checkbox"></div>
+            </div>
+          </div>
+
+          <div class="country-row selected" data-country="kr" onclick="toggleCountry(this)">
+            <div class="country-row-left">
+              <div class="country-row-flag">🇰🇷</div>
+              <div class="country-row-info">
+                <div class="country-row-name">한국</div>
+                <div class="country-row-reg">식약처 (MFDS) — 화장품법, 표시·광고 관리 가이드라인</div>
+              </div>
+            </div>
+            <div class="country-row-right">
+              <span class="badge badge-safe">MVP</span>
+              <div class="country-checkbox"></div>
+            </div>
+          </div>
+
+          <div class="country-row" data-country="eu" onclick="toggleCountry(this)">
+            <div class="country-row-left">
+              <div class="country-row-flag">🇪🇺</div>
+              <div class="country-row-info">
+                <div class="country-row-name">EU</div>
+                <div class="country-row-reg">European Commission — Regulation 1223/2009, EC 655/2013</div>
+              </div>
+            </div>
+            <div class="country-row-right">
+              <span class="badge badge-warning">Phase 2</span>
+              <div class="country-checkbox"></div>
+            </div>
+          </div>
+
+          <div class="country-row" data-country="cn" onclick="toggleCountry(this)">
+            <div class="country-row-left">
+              <div class="country-row-flag">🇨🇳</div>
+              <div class="country-row-info">
+                <div class="country-row-name">중국</div>
+                <div class="country-row-reg">NMPA — 화장품감독관리조례 (CSAR, 2021)</div>
+              </div>
+            </div>
+            <div class="country-row-right">
+              <span class="badge badge-outline">Phase 3</span>
+              <div class="country-checkbox"></div>
+            </div>
+          </div>
+
+          <div class="country-row" data-country="asean" onclick="toggleCountry(this)">
+            <div class="country-row-left">
+              <div class="country-row-flag">🌏</div>
+              <div class="country-row-info">
+                <div class="country-row-name">ASEAN</div>
+                <div class="country-row-reg">ASEAN Cosmetic Directive (ACD) — 10개국 공통</div>
+              </div>
+            </div>
+            <div class="country-row-right">
+              <span class="badge badge-outline">Phase 3</span>
+              <div class="country-checkbox"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Category -->
+      <div class="form-section" id="s-category">
+        <div class="checker-step-header">
+          <span class="checker-step-tag">Step 3</span>
+          <h2 class="checker-step-title">제품 카테고리<span class="required-dot"></span></h2>
+          <p class="checker-step-desc">카테고리에 따라 적용되는 특수화장품 규칙이 달라집니다.</p>
+        </div>
+
+        <div class="category-chips" id="categoryChips">
+          <div class="chip" data-cat="skincare" onclick="selectChip(this)">스킨케어</div>
+          <div class="chip" data-cat="suncare" onclick="selectChip(this)">선케어</div>
+          <div class="chip" data-cat="makeup" onclick="selectChip(this)">메이크업</div>
+          <div class="chip" data-cat="haircare" onclick="selectChip(this)">헤어케어</div>
+          <div class="chip" data-cat="bodycare" onclick="selectChip(this)">바디케어</div>
+          <div class="chip" data-cat="cleansing" onclick="selectChip(this)">클렌징</div>
+          <div class="chip" data-cat="aha" onclick="selectChip(this)">AHA/BHA 함유</div>
+          <div class="chip" data-cat="whitening" onclick="selectChip(this)">미백/브라이트닝</div>
+          <div class="chip" data-cat="antiaging" onclick="selectChip(this)">안티에이징</div>
+        </div>
+      </div>
+
+      <!-- Section: Input -->
+      <div class="form-section" id="s-input">
+        <div class="checker-step-header">
+          <span class="checker-step-tag">Step 4</span>
+          <h2 class="checker-step-title">카피를 입력해주세요<span class="required-dot"></span></h2>
+          <p class="checker-step-desc">패키지 라벨의 텍스트를 전체 복사해서 붙여넣어 주세요. 영문·한글 혼용 가능합니다.</p>
+        </div>
+
+        <div class="input-area">
+          <div class="input-area-header">
+            <label class="form-label" for="copyInput">라벨 텍스트</label>
+            <span class="text-counter" id="charCounter">0자</span>
+          </div>
+          <textarea
+            class="copy-textarea"
+            id="copyInput"
+            placeholder="예시: AQUA GLOW SERUM&#10;INGREDIENTS: Aqua, Glycerin, Niacinamide, Butylene Glycol, Panthenol, Sodium Hyaluronate...&#10;Net Wt. 150ml / 5oz&#10;Manufactured for: Seoul Beauty Lab Co., Ltd.&#10;123 Gangnam-daero, Seoul, Korea&#10;WARNING: For external use only..."
+            oninput="updateCounter()"
+          ></textarea>
+          <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-sm btn-secondary" onclick="loadSampleText()">📋 샘플 텍스트 불러오기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Image Upload -->
+      <div class="form-section" id="s-image">
+        <div class="checker-step-header">
+          <span class="checker-step-tag">Step 5 · 선택사항</span>
+          <h2 class="checker-step-title">라벨 시안 이미지 첨부</h2>
+          <p class="checker-step-desc">제품 라벨 시안을 첨부하면 결과 화면에서 이미지 위에 이슈 핀이 표시됩니다.</p>
+        </div>
+
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imageFileInput').click()">
+          <div class="upload-zone-icon">🖼️</div>
+          <div class="upload-zone-title">이미지를 드래그하거나 클릭하여 업로드</div>
+          <div class="upload-zone-desc">PNG, JPG, SVG, WebP · 최대 5MB</div>
+          <div class="upload-zone-btn">파일 선택</div>
+        </div>
+        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/svg+xml,image/webp" style="display:none" onchange="handleImageUpload(this.files)">
+
+        <div class="upload-preview" id="uploadPreview">
+          <img id="uploadPreviewImg" src="" alt="업로드된 라벨 시안">
+          <div class="upload-preview-bar">
+            <div class="upload-preview-info">
+              <span class="upload-preview-name" id="uploadFileName">—</span>
+              <span id="uploadFileSize">—</span>
+            </div>
+            <button class="upload-remove-btn" onclick="removeImage()">제거</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Dimensions -->
+      <div class="form-section" id="s-dims">
+        <div class="checker-step-header">
+          <span class="checker-step-tag">Step 6 · 선택사항</span>
+          <h2 class="checker-step-title">패키지 치수 입력</h2>
+          <p class="checker-step-desc">PDP 면적을 기반으로 순함량 폰트 최소 크기 규정(21 CFR 701.13)을 검증합니다.</p>
+        </div>
+
+        <div class="dimensions-toggle" id="dimToggle" onclick="toggleDimensions()">
+          <div class="dimensions-toggle-icon">▾</div>
+          <span>치수 입력 열기 (선택)</span>
+        </div>
+
+        <div class="dimensions-panel" id="dimPanel">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">패키지 유형</label>
+            <select class="form-select" id="pkgType">
+              <option value="">선택하세요</option>
+              <option value="box">박스 (Box)</option>
+              <option value="bottle">보틀 (Bottle / 원통형)</option>
+              <option value="tube">튜브 (Tube)</option>
+              <option value="jar">자 (Jar / 단지)</option>
+              <option value="pouch">파우치 (Pouch)</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+          <div class="dim-grid">
+            <div class="form-group">
+              <label class="form-label">PDP 가로</label>
+              <div style="display: flex; gap: 8px;">
+                <input class="form-input" type="number" id="pdpW" placeholder="예: 61" style="flex:1">
+                <select class="form-select" style="width: 70px; padding: 10px 8px;">
+                  <option>mm</option>
+                  <option>inch</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">PDP 세로</label>
+              <div style="display: flex; gap: 8px;">
+                <input class="form-input" type="number" id="pdpH" placeholder="예: 80" style="flex:1">
+                <select class="form-select" style="width: 70px; padding: 10px 8px;">
+                  <option>mm</option>
+                  <option>inch</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">PDP 면적</label>
+              <input class="form-input" type="text" id="pdpArea" placeholder="자동 계산" readonly style="background: var(--bg-subtle); color: var(--text-muted);">
+            </div>
+          </div>
+          <div class="dim-grid-2">
+            <div class="form-group">
+              <label class="form-label">순함량 폰트 크기</label>
+              <div style="display: flex; gap: 8px;">
+                <input class="form-input" type="number" id="fontSz" placeholder="예: 3.2" style="flex:1">
+                <select class="form-select" style="width: 70px; padding: 10px 8px;">
+                  <option>mm</option>
+                  <option>pt</option>
+                </select>
+              </div>
+              <div class="form-label-desc">디자인에서 사용한 Net Quantity 폰트 높이</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">바코드 배율</label>
+              <div style="display: flex; gap: 8px;">
+                <input class="form-input" type="number" id="barcodeScale" placeholder="예: 100" style="flex:1">
+                <span style="display: flex; align-items: center; font-size: 14px; color: var(--text-muted); padding: 0 6px;">%</span>
+              </div>
+              <div class="form-label-desc">GS1 표준 대비 배율 (최소 80%)</div>
+            </div>
+          </div>
+
+          <!-- PDP area auto result -->
+          <div id="pdpResult" style="display:none; margin-top: 16px; padding: 14px 16px; background: var(--info-light); border: 1px solid var(--info-border); border-radius: var(--r-md);">
+            <div style="font-size: 12px; font-weight: 700; color: var(--info); margin-bottom: 6px;">PDP 면적 계산 결과</div>
+            <div id="pdpResultText" style="font-size: 13px; color: var(--text-muted);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-panel" id="summaryPanel">
+        <div class="summary-title">검토 설정 요약</div>
+        <div class="summary-row">
+          <span class="summary-key">콘텐츠 유형</span>
+          <span class="summary-val" id="sum-type">패키지 라벨</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-key">대상국</span>
+          <span class="summary-val" id="sum-countries">🇺🇸 미국, 🇰🇷 한국</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-key">제품 카테고리</span>
+          <span class="summary-val" id="sum-category">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-key">입력 텍스트</span>
+          <span class="summary-val" id="sum-chars">0자</span>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="action-bar">
+        <div class="action-bar-left" id="actionBarMsg">
+          카테고리와 카피 텍스트를 입력해주세요
+        </div>
+        <div class="action-bar-right">
+          <button class="btn btn-secondary" onclick="window.location.href='index.html'">취소</button>
+          <button class="btn btn-primary" id="analyzeBtn" onclick="startAnalysis()" disabled>
+            AI 검토 시작하기 →
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/rules-engine.js"></script>
+  <script src="js/checker.js"></script>
+</body>
+</html>

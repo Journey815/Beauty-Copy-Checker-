@@ -1,0 +1,363 @@
+{
+  "version": "1.0",
+  "description": "INCI ingredient database — common cosmetic ingredients",
+  "ingredients": [
+    {
+      "inci_name": "Aqua",
+      "korean_name": "정제수",
+      "cas_number": "7732-18-5",
+      "common_misspellings": ["Aquqa", "Agua", "Aque"],
+      "category": "solvent"
+    },
+    {
+      "inci_name": "Glycerin",
+      "korean_name": "글리세린",
+      "cas_number": "56-81-5",
+      "common_misspellings": ["Glycerine", "Glycerol", "Glyserin"],
+      "category": "solvent"
+    },
+    {
+      "inci_name": "Butylene Glycol",
+      "korean_name": "부틸렌글라이콜",
+      "cas_number": "107-88-0",
+      "common_misspellings": ["Butylene Glycol", "Buylene Glycol", "Butyelne Glycol"],
+      "category": "solvent"
+    },
+    {
+      "inci_name": "Propanediol",
+      "korean_name": "프로판디올",
+      "cas_number": "504-63-2",
+      "common_misspellings": ["Propandiol", "Propanedial", "Propanediole"],
+      "category": "solvent"
+    },
+    {
+      "inci_name": "1,2-Hexanediol",
+      "korean_name": "1,2-헥산디올",
+      "cas_number": "6920-22-5",
+      "common_misspellings": ["1,2-Hexandiol", "1-2-Hexanediol", "1,2-Hexandiole"],
+      "category": "solvent"
+    },
+    {
+      "inci_name": "Sodium Hyaluronate",
+      "korean_name": "히알루론산나트륨",
+      "cas_number": "9067-32-7",
+      "common_misspellings": ["Sodium Hylauronate", "Sodium Hyaloronate", "Sodium Hyalouronate"],
+      "category": "humectant"
+    },
+    {
+      "inci_name": "Hyaluronic Acid",
+      "korean_name": "히알루론산",
+      "cas_number": "9004-61-9",
+      "common_misspellings": ["Hylauronic Acid", "Hyalouronic Acid", "Hyaloronic Acid"],
+      "category": "humectant"
+    },
+    {
+      "inci_name": "Betaine",
+      "korean_name": "베타인",
+      "cas_number": "107-43-7",
+      "common_misspellings": ["Betaaine", "Betiane", "Betain"],
+      "category": "humectant"
+    },
+    {
+      "inci_name": "Panthenol",
+      "korean_name": "판테놀",
+      "cas_number": "81-13-0",
+      "common_misspellings": ["Panthenole", "Pantenol", "Panthanol"],
+      "category": "humectant"
+    },
+    {
+      "inci_name": "Urea",
+      "korean_name": "요소",
+      "cas_number": "57-13-6",
+      "common_misspellings": ["Uera", "Uraea", "Urea (Carbamide)"],
+      "category": "humectant"
+    },
+    {
+      "inci_name": "Dimethicone",
+      "korean_name": "디메치콘",
+      "cas_number": "9006-65-9",
+      "common_misspellings": ["Dimethecone", "Dimethacone", "Dimehicone"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Cyclomethicone",
+      "korean_name": "사이클로메치콘",
+      "cas_number": "69430-24-6",
+      "common_misspellings": ["Cyclomethacone", "Cyclmethicone", "Cyclomaethicone"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Squalane",
+      "korean_name": "스쿠알란",
+      "cas_number": "111-01-3",
+      "common_misspellings": ["Squalene", "Squlane", "Squalan"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Simmondsia Chinensis Seed Oil",
+      "korean_name": "호호바씨오일",
+      "cas_number": "61789-91-1",
+      "common_misspellings": ["Simmondsia Chinesis Seed Oil", "Simondsia Chinensis Seed Oil", "Simmondsia Chinensis Seed Oill"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Cetyl Alcohol",
+      "korean_name": "세틸알코올",
+      "cas_number": "36653-82-4",
+      "common_misspellings": ["Cetyle Alcohol", "Cethyl Alcohol", "Cetyl Alchohol"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Cetearyl Alcohol",
+      "korean_name": "세테아릴알코올",
+      "cas_number": "67762-27-0",
+      "common_misspellings": ["Cetearyle Alcohol", "Cetearyls Alcohol", "Cetearyl Alchohol"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Butyrospermum Parkii Butter",
+      "korean_name": "시어버터",
+      "cas_number": "194043-92-0",
+      "common_misspellings": ["Butyrospermum Parkii Butte", "Butyrospermun Parkii Butter", "Butyrospernum Parkii Butter"],
+      "category": "emollient"
+    },
+    {
+      "inci_name": "Niacinamide",
+      "korean_name": "나이아신아마이드",
+      "cas_number": "98-92-0",
+      "common_misspellings": ["Niacimamide", "Niacinamdie", "Niacinamid"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Ascorbic Acid",
+      "korean_name": "아스코빅애씨드",
+      "cas_number": "50-81-7",
+      "common_misspellings": ["Ascobic Acid", "Ascorbic Acide", "Ascorbid Acid"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Retinol",
+      "korean_name": "레티놀",
+      "cas_number": "68-26-8",
+      "common_misspellings": ["Retinole", "Retenol", "Retinool"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Tocopherol",
+      "korean_name": "토코페롤",
+      "cas_number": "59-02-9",
+      "common_misspellings": ["Tocoperol", "Tocopherale", "Tocopherol"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Adenosine",
+      "korean_name": "아데노신",
+      "cas_number": "58-61-7",
+      "common_misspellings": ["Adenosiene", "Adeonsine", "Adenosene"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Alpha-Arbutin",
+      "korean_name": "알파-알부틴",
+      "cas_number": "84380-01-8",
+      "common_misspellings": ["Alpha Arbutin", "Alpha-Arbutine", "Alfa-Arbutin"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Salicylic Acid",
+      "korean_name": "살리실릭애씨드",
+      "cas_number": "69-72-7",
+      "common_misspellings": ["Salicyclic Acid", "Salicylic Acide", "Salicilic Acid"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Glycolic Acid",
+      "korean_name": "글라이콜릭애씨드",
+      "cas_number": "79-14-1",
+      "common_misspellings": ["Glycolyic Acid", "Glycolic Acide", "Glycollic Acid"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Lactic Acid",
+      "korean_name": "락틱애씨드",
+      "cas_number": "50-21-5",
+      "common_misspellings": ["Latic Acid", "Lactiv Acid", "Lactic Acide"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Tranexamic Acid",
+      "korean_name": "트라넥삼산",
+      "cas_number": "1197-18-8",
+      "common_misspellings": ["Tranexamic Acide", "Tranaxamic Acid", "Traenxamic Acid"],
+      "category": "active"
+    },
+    {
+      "inci_name": "Centella Asiatica Extract",
+      "korean_name": "센텔라아시아티카추출물",
+      "cas_number": "84696-21-9",
+      "common_misspellings": ["Centella Asiatica Extarct", "Centela Asiatica Extract", "Centella Asitica Extract"],
+      "category": "botanical"
+    },
+    {
+      "inci_name": "Aloe Barbadensis Leaf Juice",
+      "korean_name": "알로에바바덴시스잎즙",
+      "cas_number": "85507-69-3",
+      "common_misspellings": ["Aloe Barbadensis Leaf Jucie", "Aloe Barbadesis Leaf Juice", "Aloe Barbadensis Leaf Juise"],
+      "category": "botanical"
+    },
+    {
+      "inci_name": "Camellia Sinensis Leaf Extract",
+      "korean_name": "카멜리아시넨시스잎추출물",
+      "cas_number": "84650-60-2",
+      "common_misspellings": ["Camellia Sinesis Leaf Extract", "Camellia Sinensis Leaf Extarct", "Camelia Sinensis Leaf Extract"],
+      "category": "botanical"
+    },
+    {
+      "inci_name": "Rosa Damascena Flower Water",
+      "korean_name": "로사다마스세나꽃수",
+      "cas_number": "90106-38-0",
+      "common_misspellings": ["Rosa Damscena Flower Water", "Rosa Damascena Flower Watter", "Rosa Damascena Flowe Water"],
+      "category": "botanical"
+    },
+    {
+      "inci_name": "Chamomilla Recutita Flower Extract",
+      "korean_name": "카모밀라레쿠티타꽃추출물",
+      "cas_number": "84082-60-0",
+      "common_misspellings": ["Chamomilla Recuita Flower Extract", "Chamomila Recutita Flower Extract", "Chamomilla Recutita Flower Extarct"],
+      "category": "botanical"
+    },
+    {
+      "inci_name": "Phenoxyethanol",
+      "korean_name": "페녹시에탄올",
+      "cas_number": "122-99-6",
+      "common_misspellings": ["Phenoxyethonal", "Phenoxethanol", "Phenoxyethnaol"],
+      "category": "preservative"
+    },
+    {
+      "inci_name": "Ethylhexylglycerin",
+      "korean_name": "에틸헥실글리세린",
+      "cas_number": "70445-33-9",
+      "common_misspellings": ["Ethylhexylglcyerin", "Ethylhexyglycerine", "Ehtylhexylglycerin"],
+      "category": "preservative"
+    },
+    {
+      "inci_name": "Methylparaben",
+      "korean_name": "메틸파라벤",
+      "cas_number": "99-76-3",
+      "common_misspellings": ["Methyparaben", "Methlparaben", "Methylparabene"],
+      "category": "preservative"
+    },
+    {
+      "inci_name": "Propylparaben",
+      "korean_name": "프로필파라벤",
+      "cas_number": "94-13-3",
+      "common_misspellings": ["Proplparaben", "Propylparabene", "Propylpaarben"],
+      "category": "preservative"
+    },
+    {
+      "inci_name": "Carbomer",
+      "korean_name": "카보머",
+      "cas_number": "9003-01-4",
+      "common_misspellings": ["Carbomet", "Carbmore", "Carbomere"],
+      "category": "thickener"
+    },
+    {
+      "inci_name": "Xanthan Gum",
+      "korean_name": "잔탄검",
+      "cas_number": "11138-66-2",
+      "common_misspellings": ["Xanthane Gum", "Xantam Gum", "Xantan Gum"],
+      "category": "thickener"
+    },
+    {
+      "inci_name": "Cellulose",
+      "korean_name": "셀룰로오스",
+      "cas_number": "9004-34-6",
+      "common_misspellings": ["Celllulose", "Celulose", "Celullose"],
+      "category": "thickener"
+    },
+    {
+      "inci_name": "Tromethamine",
+      "korean_name": "트로메타민",
+      "cas_number": "77-86-1",
+      "common_misspellings": ["Tromethamine", "Troethamine", "Tromethanmine"],
+      "category": "thickener"
+    },
+    {
+      "inci_name": "Sodium Lauryl Sulfate",
+      "korean_name": "소듐라우릴설페이트",
+      "cas_number": "151-21-3",
+      "common_misspellings": ["Sodium Lauryl Sulphate", "Sodium Lauryl Sulfate", "Sodium Laruyl Sulfate"],
+      "category": "surfactant"
+    },
+    {
+      "inci_name": "Cocamidopropyl Betaine",
+      "korean_name": "코카미도프로필베타인",
+      "cas_number": "61789-40-0",
+      "common_misspellings": ["Cocamidopropyl Betiane", "Cocamidoproyl Betaine", "Cocomidopropyl Betaine"],
+      "category": "surfactant"
+    },
+    {
+      "inci_name": "PEG-60 Hydrogenated Castor Oil",
+      "korean_name": "PEG-60 수첨피마자오일",
+      "cas_number": "61788-85-0",
+      "common_misspellings": ["PEG60 Hydrogenated Castor Oil", "PEG-60 Hydrogenated Cator Oil", "PEG-60 Hydrogenated Castor Oill"],
+      "category": "surfactant"
+    },
+    {
+      "inci_name": "Disodium EDTA",
+      "korean_name": "다이소듐이디티에이",
+      "cas_number": "139-33-3",
+      "common_misspellings": ["Disodium EDTDA", "Disodim EDTA", "Disodium ETDA"],
+      "category": "chelating"
+    },
+    {
+      "inci_name": "Allantoin",
+      "korean_name": "알란토인",
+      "cas_number": "97-59-6",
+      "common_misspellings": ["Allantoine", "Alantoin", "Allantoin"],
+      "category": "soothing"
+    },
+    {
+      "inci_name": "Ceramide NP",
+      "korean_name": "세라마이드엔피",
+      "cas_number": "100403-19-8",
+      "common_misspellings": ["Ceramide NP", "Ceramied NP", "Ceramide NPS"],
+      "category": "skin-barrier"
+    },
+    {
+      "inci_name": "Madecassoside",
+      "korean_name": "마데카소사이드",
+      "cas_number": "34540-22-2",
+      "common_misspellings": ["Madecososide", "Madecasoxide", "Madecasosside"],
+      "category": "soothing"
+    },
+    {
+      "inci_name": "Limonene",
+      "korean_name": "리모넨",
+      "cas_number": "138-86-3",
+      "common_misspellings": ["Limonene", "Limonen", "Limoneen"],
+      "category": "fragrance"
+    },
+    {
+      "inci_name": "Linalool",
+      "korean_name": "리날룰",
+      "cas_number": "78-70-6",
+      "common_misspellings": ["Linalol", "Linallool", "Linalole"],
+      "category": "fragrance"
+    },
+    {
+      "inci_name": "Citric Acid",
+      "korean_name": "구연산",
+      "cas_number": "77-92-9",
+      "common_misspellings": ["Citric Acide", "Cittic Acid", "Citric Acied"],
+      "category": "pH-adjuster"
+    },
+    {
+      "inci_name": "Titanium Dioxide",
+      "korean_name": "이산화타이타늄",
+      "cas_number": "13463-67-7",
+      "common_misspellings": ["Titanium Diaxide", "Titanum Dioxide", "Titanium Dioxdie"],
+      "category": "UV-filter"
+    }
+  ]
+}

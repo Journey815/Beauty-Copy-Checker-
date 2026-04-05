@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "country": "KR",
+  "regulation": "식약처 (MFDS) / 화장품법",
+  "rules": [
+    {
+      "id": "KR-LAB-001",
+      "name": "성분명 표기",
+      "regulation_ref": "화장품법 시행규칙 제19조",
+      "content_types": ["label"],
+      "category": "ingredient",
+      "severity": "critical",
+      "check_type": "presence",
+      "description_ko": "INCI 또는 한글 성분명을 표기해야 합니다",
+      "check_logic": "Verify presence of ingredient list in INCI or Korean",
+      "fix_suggestion_ko": "INCI 국제 명칭 또는 대한화장품협회 지정 한글 성분명을 표기하세요"
+    },
+    {
+      "id": "KR-LAB-002",
+      "name": "기능성 화장품 심사",
+      "regulation_ref": "화장품법 제4조",
+      "content_types": ["label", "web"],
+      "category": "claim",
+      "severity": "critical",
+      "check_type": "conditional_presence",
+      "description_ko": "미백, 주름개선, 자외선차단 기능 표방 시 기능성 화장품 심사를 받아야 합니다",
+      "check_logic": "If functional cosmetic keywords detected, flag for review",
+      "trigger_keywords_ko": [
+        "미백",
+        "화이트닝",
+        "주름개선",
+        "주름 개선",
+        "안티링클",
+        "자외선차단",
+        "자외선 차단",
+        "선블록",
+        "UV 차단"
+      ],
+      "fix_suggestion_ko": "해당 기능을 표방하려면 기능성 화장품 심사(식약처)가 필요합니다"
+    },
+    {
+      "id": "KR-AD-001",
+      "name": "식약처 금지 표현",
+      "regulation_ref": "화장품법 제13조, 화장품 표시·광고 관리 가이드라인",
+      "content_types": ["ad", "web", "label"],
+      "category": "claim",
+      "severity": "critical",
+      "check_type": "absence",
+      "description_ko": "의약품 오인 표현, 식약처 고시 금지 표현이 금지됩니다",
+      "check_logic": "Match against Korean drug claim patterns from drug-claim-patterns.json",
+      "patterns_file": "drug-claim-patterns.json",
+      "fix_suggestion_ko": "식약처 금지 표현 목록을 확인하고 허용 범위 내 표현으로 교체하세요"
+    },
+    {
+      "id": "KR-AD-002",
+      "name": "효능 과대 광고",
+      "regulation_ref": "화장품법 제13조",
+      "content_types": ["ad", "web"],
+      "category": "claim",
+      "severity": "major",
+      "check_type": "absence",
+      "description_ko": "\"완치\", \"100% 효과\" 등 과대 광고 표현이 금지됩니다",
+      "check_logic": "Check for exaggerated efficacy claims in Korean",
+      "prohibited_patterns_ko": [
+        "완치",
+        "100% 효과",
+        "확실한 효과",
+        "즉각적 효과",
+        "기적의",
+        "만병통치",
+        "특효",
+        "절대적"
+      ],
+      "fix_suggestion_ko": "과대 광고 표현을 완화하세요 (예: '완치' → '케어', '100% 효과' → '효과적인 케어')"
+    }
+  ]
+}

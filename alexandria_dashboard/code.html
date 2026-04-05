@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alexandria Compliance | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#737784",
+                    "inverse-on-surface": "#f2f0f1",
+                    "background": "#faf9fa",
+                    "primary-fixed": "#d9e2ff",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#e7ebff",
+                    "inverse-primary": "#b1c5ff",
+                    "on-tertiary-fixed": "#211b00",
+                    "secondary": "#5a5f63",
+                    "on-background": "#1b1c1d",
+                    "secondary-fixed-dim": "#c2c7cc",
+                    "surface-dim": "#dbdadb",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c3c6d5",
+                    "primary": "#094cb2",
+                    "surface-container-highest": "#e3e2e3",
+                    "on-surface-variant": "#434653",
+                    "tertiary-container": "#bfab49",
+                    "surface-container-high": "#e9e8e9",
+                    "on-surface": "#1b1c1d",
+                    "surface-variant": "#e3e2e3",
+                    "surface": "#faf9fa",
+                    "on-primary-fixed": "#001946",
+                    "tertiary-fixed-dim": "#dcc661",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#6d5e00",
+                    "secondary-container": "#dfe3e8",
+                    "on-tertiary-container": "#4a3f00",
+                    "tertiary-fixed": "#f9e37a",
+                    "inverse-surface": "#303031",
+                    "surface-tint": "#2259bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f5f3f4",
+                    "primary-fixed-dim": "#b1c5ff",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-container": "#3366cc",
+                    "surface-container": "#efedee",
+                    "secondary-fixed": "#dfe3e8",
+                    "on-tertiary-fixed-variant": "#524600",
+                    "on-secondary-fixed-variant": "#42474b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#00419d",
+                    "on-secondary-fixed": "#171c20",
+                    "on-secondary-container": "#606569",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#faf9fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Inter"],
+                    "label": ["Public Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+        .label-text { font-family: 'Public Sans', sans-serif; }
+        .glass-nav { backdrop-filter: blur(20px); }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm dark:shadow-none flex justify-between items-center px-8 h-16 w-full max-w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-serif font-bold text-slate-900 dark:text-slate-100">Alexandria Compliance</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-blue-700 dark:text-blue-400 border-b-2 border-blue-700 dark:border-blue-400 font-serif tracking-tight transition-colors duration-200 ease-in-out" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 font-serif tracking-tight hover:text-blue-600 dark:hover:text-blue-300 transition-colors duration-200 ease-in-out" href="#">Projects</a>
+<a class="text-slate-600 dark:text-slate-400 font-serif tracking-tight hover:text-blue-600 dark:hover:text-blue-300 transition-colors duration-200 ease-in-out" href="#">Guidelines</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="pl-10 pr-4 py-1.5 rounded-full border-none bg-surface-container text-sm focus:ring-2 focus:ring-primary w-64" placeholder="Search regulations..." type="text"/>
+</div>
+<button class="text-slate-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="Regulatory Specialist Profile" class="w-8 h-8 rounded-full border border-outline-variant/30" data-alt="Professional portrait of a regulatory specialist in a clean studio setting with soft lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA-IJgBRxduIyIXY8axqlobsvRZ5yKX_gkqWkuq6z8m5hnvk7plMq0SylcaNLkcUhL4DLsX6q_R1zxc_biqhwfrSMvoqlNqfXbbHRKbQncPntfNmkwc-h6h_8jsPhDhKPaYdnW3lbmF7dlNQHxXvaGbOgQ4Sd-B7yIVAjBrJp6sjiHj5UnvlG7RyBS9cfV9F1OUo8X06Qa1yvQ5bVxkh3cFgHTWNWr4aFR7lhVEHcjBlCKAttirr53ZDQfv_bSZnRZdVx_293O0Vaj"/>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-slate-50 dark:bg-slate-950 flex flex-col h-full pt-20 pb-6">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<div class="text-lg font-serif italic text-blue-800 dark:text-blue-300">Global Regulatory</div>
+<div class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Enterprise Tier</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-blue-700 dark:text-blue-400 font-bold border-r-4 border-blue-700 dark:border-blue-400 bg-blue-50/50 dark:bg-blue-900/20 font-sans text-sm tracking-wide transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-sm tracking-wide transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="folder_managed">folder_managed</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-sm tracking-wide transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="barcode_scanner">barcode_scanner</span>
+<span>Label Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-sm tracking-wide transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+<span>Web Audit</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-100 font-sans text-sm tracking-wide transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Archive</span>
+</a>
+</nav>
+<div class="px-6 mb-6">
+<button class="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-container text-white font-medium flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span>New Analysis</span>
+</button>
+</div>
+<div class="border-t border-slate-200/50 pt-4 space-y-1">
+<a class="flex items-center gap-3 px-6 py-2 text-slate-500 hover:text-slate-900 font-sans text-sm transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-2 text-slate-500 hover:text-slate-900 font-sans text-sm transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-10 pb-12">
+<!-- Header Section -->
+<header class="mb-10 flex justify-between items-end">
+<div>
+<h1 class="text-4xl font-bold text-on-surface tracking-tight mb-2">Compliance Overview</h1>
+<p class="text-secondary font-body max-w-2xl leading-relaxed">System-wide monitoring of product labels, web content, and regulatory alignment across global territories.</p>
+</div>
+<div class="flex gap-3">
+<div class="px-4 py-2 bg-surface-container-high rounded-full border border-outline-variant/20 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="label-text text-xs font-bold text-on-surface-variant">System Status: Optimal</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 mb-10">
+<!-- Market Compliance Cards -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-2 gap-6">
+<!-- US Market -->
+<div class="bg-surface-container-lowest p-8 rounded-xl relative overflow-hidden group border border-outline-variant/10">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="flag">flag</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="label-text text-[10px] font-bold tracking-widest uppercase text-tertiary px-2 py-0.5 bg-tertiary-fixed rounded">North America</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">United States</h3>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-5xl font-headline font-bold text-primary">94%</span>
+<span class="text-secondary label-text text-sm font-medium">Compliance Rate</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mb-6">
+<div class="bg-primary h-1.5 rounded-full" style="width: 94%"></div>
+</div>
+<div class="flex justify-between items-center text-xs label-text font-bold text-on-surface-variant">
+<span>12 Projects Active</span>
+<span class="text-primary cursor-pointer hover:underline">View Market Report →</span>
+</div>
+</div>
+</div>
+<!-- KR Market -->
+<div class="bg-surface-container-lowest p-8 rounded-xl relative overflow-hidden group border border-outline-variant/10">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="public">public</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="label-text text-[10px] font-bold tracking-widest uppercase text-tertiary px-2 py-0.5 bg-tertiary-fixed rounded">East Asia</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">South Korea</h3>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-5xl font-headline font-bold text-tertiary">81%</span>
+<span class="text-secondary label-text text-sm font-medium">Compliance Rate</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mb-6">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 81%"></div>
+</div>
+<div class="flex justify-between items-center text-xs label-text font-bold text-on-surface-variant">
+<span>5 Projects Active</span>
+<span class="text-tertiary cursor-pointer hover:underline">View Market Report →</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Stats Card -->
+<div class="col-span-12 lg:col-span-4 bg-surface-dim/40 p-8 rounded-xl border border-outline-variant/10">
+<h3 class="text-xl font-bold mb-6">Project Summary</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<div>
+<div class="text-sm font-bold label-text">In Progress</div>
+<div class="text-xs text-secondary">Awaiting Specialist Review</div>
+</div>
+</div>
+<span class="text-xl font-headline font-bold">14</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
+</div>
+<div>
+<div class="text-sm font-bold label-text">Verified</div>
+<div class="text-xs text-secondary">Approved for Market Entry</div>
+</div>
+</div>
+<span class="text-xl font-headline font-bold">42</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-error-container/30 text-error flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+<div>
+<div class="text-sm font-bold label-text">Critical Alerts</div>
+<div class="text-xs text-secondary">Immediate Action Required</div>
+</div>
+</div>
+<span class="text-xl font-headline font-bold text-error">3</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/20">
+<button class="w-full py-2.5 text-primary text-sm font-bold label-text bg-white rounded hover:bg-primary/5 transition-colors">Generate Monthly Audit Report</button>
+</div>
+</div>
+</div>
+<!-- Recent Analysis Table -->
+<section class="bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/10">
+<div class="px-8 py-6 flex justify-between items-center border-b border-surface-container">
+<h3 class="text-xl font-bold">Recent Analyses</h3>
+<div class="flex gap-4">
+<button class="text-xs font-bold label-text text-secondary hover:text-on-surface">Label Checks</button>
+<button class="text-xs font-bold label-text text-secondary hover:text-on-surface">Web Audits</button>
+<button class="text-xs font-bold label-text text-primary">All Activity</button>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low/50">
+<tr>
+<th class="px-8 py-4 label-text text-[11px] font-bold uppercase tracking-widest text-secondary">Analysis Target</th>
+<th class="px-8 py-4 label-text text-[11px] font-bold uppercase tracking-widest text-secondary">Market</th>
+<th class="px-8 py-4 label-text text-[11px] font-bold uppercase tracking-widest text-secondary">Date</th>
+<th class="px-8 py-4 label-text text-[11px] font-bold uppercase tracking-widest text-secondary">Status</th>
+<th class="px-8 py-4 label-text text-[11px] font-bold uppercase tracking-widest text-secondary">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Item 1: Pass -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 bg-slate-200 rounded-sm flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Modern cosmetic product packaging mockup with minimalist typography and soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEhPiDvUNxjabVT_19onV4NvN9SlOGzJTSA0qx67un1isilCbW8v4fq_cZFsOHMtbS6h5Sa6nCVT3qolG1BM-WAikK5c5nDxdD3itIS8lSHkr-IM-InF5Jb13YxFL1nIIqTQKq0Ah46x0rJEi-qCZClPlpYnec3lfuH8MIAgsGvKjW8HcXdeiBvf4ckXKQpLGLEdyF96LI5Xblf8pdiO11Dytq4bPdPB0wTvpwVngETa1XMwFWzrmR6iVM1By1Q-LDprnrUH2KWK7s"/>
+</div>
+<div>
+<div class="font-bold text-sm">Lumina Essence Serum</div>
+<div class="text-xs text-secondary font-body">v2.4 Label Design</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-4">
+<span class="label-text text-[11px] font-bold text-on-surface-variant">US / FDA</span>
+</td>
+<td class="px-8 py-4">
+<div class="text-sm font-body text-secondary">Oct 12, 2023</div>
+</td>
+<td class="px-8 py-4">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-100 text-green-700">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="label-text text-[10px] font-bold">Pass</span>
+</div>
+</td>
+<td class="px-8 py-4">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+<!-- Item 2: Fail -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 bg-slate-200 rounded-sm flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Luxury skincare cream jar with premium glass finish and gold lid" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhoN3kA1lTkp28oF9EjnM4ySOZ6jg5ifGh-TM-ww0V9vUoMsElnr4X9jcAy1nDEMAV6hT5MJjbx9-sYHmC5skHnWpAEHRpKbBykM6ROs6dYsMkucG4iQVIXDaJu0rvX_3yj3LlbexMw7G-ChbV07zih0tSliJX1miX-BVH5Db9zLac26Ytm2xIk2fz582sUlMqxQDG4wuJec9KGc3qrlSpyhng4jkjxzm-O6SCCR5Bdj4-yMbvWRelMRdyRkAG3-wY6_DjWLqi9pjZ"/>
+</div>
+<div>
+<div class="font-bold text-sm">Night Repair Balm</div>
+<div class="text-xs text-secondary font-body">KR Regional Website</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-4">
+<span class="label-text text-[11px] font-bold text-on-surface-variant">KR / MFDS</span>
+</td>
+<td class="px-8 py-4">
+<div class="text-sm font-body text-secondary">Oct 11, 2023</div>
+</td>
+<td class="px-8 py-4">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-error">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span class="label-text text-[10px] font-bold">Fail</span>
+</div>
+</td>
+<td class="px-8 py-4">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+<!-- Item 3: Warning -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 bg-slate-200 rounded-sm flex items-center justify-center overflow-hidden text-slate-400">
+<span class="material-symbols-outlined" data-icon="web">web</span>
+</div>
+<div>
+<div class="font-bold text-sm">Homepage Audit</div>
+<div class="text-xs text-secondary font-body">Hero Section Claims</div>
+</div>
+</div>
+</td>
+<td class="px-8 py-4">
+<span class="label-text text-[11px] font-bold text-on-surface-variant">Global / FTC</span>
+</td>
+<td class="px-8 py-4">
+<div class="text-sm font-body text-secondary">Oct 10, 2023</div>
+</td>
+<td class="px-8 py-4">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">error</span>
+<span class="label-text text-[10px] font-bold">Warning</span>
+</div>
+</td>
+<td class="px-8 py-4">
+<button class="text-primary hover:text-primary-container"><span class="material-symbols-outlined">visibility</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-8 py-4 border-t border-surface-container bg-surface-container-low/20">
+<a class="text-xs font-bold label-text text-primary flex items-center gap-1" href="#">View full analysis history <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
+</div>
+</section>
+</main>
+<!-- Contextual Floating Notification (Subtle) -->
+<div class="fixed bottom-6 right-6 z-50">
+<div class="bg-inverse-surface text-inverse-on-surface px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 border border-white/10">
+<span class="material-symbols-outlined text-primary-fixed">info</span>
+<div class="text-xs">
+<span class="font-bold block">New Regulatory Update</span>
+<span class="opacity-80">FDA Cosmetic Regulation v2024.1 detected.</span>
+</div>
+<button class="ml-4 px-3 py-1.5 bg-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-white/20 transition-colors">Review Changes</button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>검토 결과 — Beauty Copy Checker</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .results-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .results-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .results-meta strong { color: var(--text); }
+    .results-actions { display: flex; gap: 10px; }
+
+    /* Stats Bar */
+    .stats-bar {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 48px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: var(--r-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--t);
+      margin-right: 8px;
+      border: 1.5px solid transparent;
+    }
+    .stat-pill.critical { background: var(--critical-light); color: var(--critical); border-color: var(--critical-border); }
+    .stat-pill.warning  { background: var(--warning-light);  color: var(--warning);  border-color: var(--warning-border); }
+    .stat-pill.safe     { background: var(--safe-light);     color: var(--safe);     border-color: var(--safe-border); }
+    .stat-pill.all      { background: var(--bg-subtle); color: var(--text-muted); border-color: var(--border); }
+    .stat-pill.active, .stat-pill:hover { filter: brightness(0.95); }
+    .stat-count { font-size: 16px; font-weight: 700; }
+    .stats-bar-right { margin-left: auto; display: flex; gap: 8px; }
+
+    /* Main split layout */
+    .results-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      height: calc(100vh - 60px - 60px - 52px);
+      overflow: hidden;
+    }
+
+    /* Image panel */
+    .image-panel {
+      border-right: 1px solid var(--border);
+      overflow: auto;
+      background: #EAEAE8;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px;
+    }
+    .image-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    .label-img {
+      width: 420px;
+      height: auto;
+      display: block;
+      border-radius: var(--r-md);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    }
+
+    /* Pins */
+    .pin {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2.5px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    .pin:hover, .pin.active {
+      transform: translate(-50%, -50%) scale(1.25);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .pin.critical { background: var(--critical); color: white; }
+    .pin.warning  { background: var(--warning);  color: white; }
+    .pin.safe     { background: var(--safe);      color: white; }
+
+    /* Side panel */
+    .side-panel {
+      overflow-y: auto;
+      background: var(--bg);
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-white);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .filter-tab {
+      padding: 13px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: var(--t);
+      white-space: nowrap;
+    }
+    .filter-tab.active { color: var(--text); border-bottom-color: var(--text); }
+    .filter-tab:hover:not(.active) { color: var(--text); }
+
+    /* Issue list */
+    .issue-list { padding: 8px 0; }
+    .issue-item {
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background var(--t);
+    }
+    .issue-item:hover, .issue-item.active { background: var(--bg-subtle); }
+    .issue-item-inner { padding: 16px 20px; }
+    .issue-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+    .issue-pin-id {
+      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: white; margin-top: 1px;
+    }
+    .issue-pin-id.critical { background: var(--critical); }
+    .issue-pin-id.warning  { background: var(--warning); }
+    .issue-pin-id.safe     { background: var(--safe); }
+    .issue-title { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; flex: 1; }
+    .issue-flags { display: flex; gap: 4px; flex-shrink: 0; }
+    .issue-body { margin-top: 8px; }
+    .issue-row { display: flex; gap: 8px; margin-bottom: 4px; font-size: 12.5px; }
+    .issue-label { color: var(--text-subtle); width: 44px; flex-shrink: 0; }
+    .issue-value { color: var(--text-muted); line-height: 1.45; }
+    .issue-value strong { color: var(--text); }
+    .issue-value code {
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 3px; font-size: 11.5px;
+      font-family: 'Menlo', monospace; color: var(--text);
+    }
+    .issue-fix {
+      margin-top: 10px; padding: 10px 12px;
+      background: var(--bg-white); border-left: 3px solid var(--border-md);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    }
+    .issue-fix.critical { border-left-color: var(--critical); background: var(--critical-light); }
+    .issue-fix.warning  { border-left-color: var(--warning);  background: var(--warning-light); }
+    .issue-fix.safe     { border-left-color: var(--safe);     background: var(--safe-light); }
+    .issue-fix-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-subtle); margin-bottom: 3px; }
+    .issue-fix-text { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+    .issue-assignee {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 8px; padding: 3px 8px;
+      background: var(--bg-white); border: 1px solid var(--border);
+      border-radius: var(--r-pill); font-size: 11px; color: var(--text-muted);
+    }
+
+    /* Action items table */
+    .action-section {
+      border-top: 1px solid var(--border);
+      background: var(--bg-white);
+    }
+    .action-section-header {
+      padding: 20px 48px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .action-section-title { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+    .action-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .action-table th {
+      text-align: left; padding: 10px 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-subtle); border-bottom: 1px solid var(--border);
+      background: var(--bg-subtle);
+    }
+    .action-table td { padding: 12px 20px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .action-table tr:last-child td { border-bottom: none; }
+    .action-table tr:hover td { background: var(--bg-subtle); }
+    .assignee-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: var(--r-pill);
+      font-size: 11px; font-weight: 600;
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    /* Chatbot */
+    .chatbot-section {
+      border-top: 1px solid var(--border);
+      background: var(--bg-white);
+    }
+    .chatbot-header {
+      padding: 16px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border); cursor: pointer;
+    }
+    .chatbot-header-left { display: flex; align-items: center; gap: 10px; }
+    .chatbot-title { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; }
+    .chatbot-disclaimer {
+      font-size: 11px; color: var(--text-subtle);
+      padding: 8px 48px;
+      border-bottom: 1px solid var(--border);
+      background: var(--warning-light);
+    }
+    .chatbot-body { padding: 24px 48px; max-height: 400px; overflow-y: auto; }
+    .chat-messages { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+    .chat-msg { display: flex; gap: 10px; }
+    .chat-msg.user { flex-direction: row-reverse; }
+    .chat-avatar {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; margin-top: 2px;
+    }
+    .chat-avatar.bot { background: var(--text); color: var(--bg); font-size: 11px; font-weight: 700; }
+    .chat-avatar.user { background: var(--bg-subtle); border: 1px solid var(--border); }
+    .chat-bubble {
+      max-width: 520px; padding: 12px 16px;
+      border-radius: var(--r-lg); font-size: 13.5px; line-height: 1.6;
+    }
+    .chat-msg.bot .chat-bubble  { background: var(--bg-subtle); border: 1px solid var(--border); border-top-left-radius: 4px; }
+    .chat-msg.user .chat-bubble { background: var(--text); color: var(--bg); border-top-right-radius: 4px; }
+    .chat-bubble-ref { font-size: 11px; color: var(--text-subtle); margin-top: 6px; }
+    .chat-input-row {
+      display: flex; gap: 10px; align-items: flex-end;
+    }
+    .chat-input {
+      flex: 1; padding: 11px 16px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r-pill); font-size: 13.5px; font-family: var(--font);
+      color: var(--text); outline: none; transition: var(--t);
+    }
+    .chat-input:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(10,10,10,0.06); }
+    .chat-input::placeholder { color: var(--text-subtle); }
+    .chat-send {
+      padding: 10px 20px; background: var(--text); color: var(--bg);
+      border: none; border-radius: var(--r-pill); font-size: 13px; font-weight: 600;
+      font-family: var(--font); cursor: pointer; transition: var(--t);
+    }
+    .chat-send:hover { opacity: 0.8; }
+
+    /* No results */
+    .no-results {
+      padding: 40px 20px; text-align: center; color: var(--text-subtle); font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <a href="index.html" class="logo-pill"><span class="logo-accent"></span>BeautyCopyChecker</a>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span id="headerMeta" style="font-size:13px;color:var(--text-muted);">패키지 라벨 · 🇺🇸 🇰🇷</span>
+    <a href="checker.html" class="btn btn-secondary btn-sm">← 다시 검토</a>
+  </div>
+</header>
+
+<!-- Results sub-header -->
+<div class="results-header">
+  <div class="results-meta">
+    <strong id="metaTitle">검토 결과</strong> — <span id="metaDetail">패키지 라벨 | 스킨케어 | 미국 FDA/MoCRA · 한국 화장품법</span> | <span id="metaTime"></span>
+  </div>
+  <div class="results-actions">
+    <button class="btn btn-secondary btn-sm">🔗 공유 링크</button>
+    <button class="btn btn-secondary btn-sm">📄 PDF 내보내기</button>
+    <button class="btn btn-primary btn-sm">✓ 최종 승인</button>
+  </div>
+</div>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-pill critical active" onclick="filterIssues('critical')">
+    <span class="stat-count">3</span> 수정 필수
+  </div>
+  <div class="stat-pill warning" onclick="filterIssues('warning')">
+    <span class="stat-count">5</span> 확인 필요
+  </div>
+  <div class="stat-pill safe" onclick="filterIssues('safe')">
+    <span class="stat-count">4</span> 안전
+  </div>
+  <div class="stat-pill all" onclick="filterIssues('all')">
+    전체 12건
+  </div>
+  <div class="stats-bar-right">
+    <select class="form-select btn-sm" style="width:auto;padding:7px 32px 7px 12px;border-radius:var(--r-pill);" onchange="filterAssignee(this.value)">
+      <option value="all">담당자 전체</option>
+      <option value="designer">디자이너</option>
+      <option value="manufacturer">제조사</option>
+      <option value="agency">문안검토 에이전시</option>
+    </select>
+  </div>
+</div>
+
+<!-- Main split -->
+<div class="results-layout">
+
+  <!-- Image panel -->
+  <div class="image-panel" id="imagePanel">
+    <div class="image-wrap" id="imageWrap">
+      <img src="product_label.svg" class="label-img" id="labelImg" alt="AQUA GLOW SERUM 패키지 라벨" onload="positionPins()">
+
+      <!-- Pins will be injected by JS -->
+    </div>
+  </div>
+
+  <!-- Side panel -->
+  <div class="side-panel">
+    <div class="filter-tabs">
+      <div class="filter-tab active" onclick="filterIssues('all', this)">전체</div>
+      <div class="filter-tab" onclick="filterIssues('critical', this)">● 수정 필수 <span style="background:var(--critical-light);color:var(--critical);padding:1px 6px;border-radius:10px;font-size:10px;margin-left:2px;">3</span></div>
+      <div class="filter-tab" onclick="filterIssues('warning', this)">▲ 확인 필요 <span style="background:var(--warning-light);color:var(--warning);padding:1px 6px;border-radius:10px;font-size:10px;margin-left:2px;">5</span></div>
+      <div class="filter-tab" onclick="filterIssues('safe', this)">✓ 안전 <span style="background:var(--safe-light);color:var(--safe);padding:1px 6px;border-radius:10px;font-size:10px;margin-left:2px;">4</span></div>
+    </div>
+
+    <div class="issue-list" id="issueList">
+      <!-- Issues injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Action Items Table -->
+<div class="action-section">
+  <div class="action-section-header" style="padding: 20px 48px 0;">
+    <div class="action-section-title">액션 아이템 요약</div>
+    <span style="font-size:13px;color:var(--text-muted);">총 8건 · 담당별 그룹</span>
+  </div>
+  <div style="padding: 16px 48px 32px; overflow-x: auto;">
+    <table class="action-table">
+      <thead>
+        <tr>
+          <th style="width:140px">담당</th>
+          <th>항목</th>
+          <th style="width:100px">상태</th>
+          <th>액션</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="3"><span class="assignee-badge">문안검토 에이전시</span></td>
+          <td><span style="color:var(--critical);font-weight:600;">●1</span> Drug Claim 표현 — "피부 재생을 도와 주름을 치료합니다"</td>
+          <td><span class="badge badge-critical">수정 필수</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">의약품적 표현 제거 후 cosmetic claim으로 교체</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--warning);font-weight:600;">▲6</span> "Hydrating & Brightening" 효능 표현</td>
+          <td><span class="badge badge-warning">확인 필요</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">cosmetic claim 범위 내 표현인지 검토</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--warning);font-weight:600;">▲7</span> 한국어 효능 과대광고 — "완치"</td>
+          <td><span class="badge badge-warning">확인 필요</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">식약처 금지 표현. 표현 완화 필요</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><span class="assignee-badge">제조사</span></td>
+          <td><span style="color:var(--critical);font-weight:600;">●2</span> 미국 주소(도시·주·ZIP) 누락</td>
+          <td><span class="badge badge-critical">수정 필수</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">US 배급사 주소 추가 (city, state, ZIP)</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--warning);font-weight:600;">▲8</span> 성분 함량순 정렬 확인 필요</td>
+          <td><span class="badge badge-warning">확인 필요</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">Limonene, Linalool 배열 순서 재확인</td>
+        </tr>
+        <tr>
+          <td rowspan="3"><span class="assignee-badge">디자이너</span></td>
+          <td><span style="color:var(--critical);font-weight:600;">●3</span> Net Quantity — oz 단위 누락 ("150ml"만 표시)</td>
+          <td><span class="badge badge-critical">수정 필수</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">"150ml / 5 fl oz" 형식으로 수정</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--warning);font-weight:600;">▲4</span> INCI 스펠링 오류 가능성 — "Glycerln"</td>
+          <td><span class="badge badge-warning">확인 필요</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">→ "Glycerin" 수정 확인</td>
+        </tr>
+        <tr>
+          <td><span style="color:var(--warning);font-weight:600;">▲5</span> 순함량 폰트 크기 — 최소 기준 미달 의심</td>
+          <td><span class="badge badge-warning">확인 필요</span></td>
+          <td style="font-size:12.5px;color:var(--text-muted);">PDP 면적 대비 폰트 높이 3.2mm 이상 확인</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Chatbot -->
+<div class="chatbot-section">
+  <div class="chatbot-header" onclick="toggleChatbot()">
+    <div class="chatbot-header-left">
+      <span style="font-size:18px;">💬</span>
+      <span class="chatbot-title">규제 Q&A — 화장품법 AI 어시스턴트</span>
+      <span class="badge badge-safe" style="font-size:10px;">Rule DB 기반</span>
+    </div>
+    <span id="chatbotToggleIcon" style="font-size:16px;color:var(--text-muted);">▲</span>
+  </div>
+  <div class="chatbot-disclaimer">
+    ⚠️ 이 답변은 참고용이며 법률 자문이 아닙니다. 최종 판단은 규제 전문가와 함께 하시기 바랍니다.
+  </div>
+  <div class="chatbot-body" id="chatbotBody">
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        <div class="chat-avatar bot">AI</div>
+        <div class="chat-bubble">
+          안녕하세요! 미국 FDA/MoCRA 및 한국 화장품법 기반 규제 Q&A 챗봇입니다.<br>
+          현재 검토 결과에 있는 항목에 대해 질문하거나, 자유롭게 규제를 물어보세요.<br><br>
+          <strong>빠른 질문 예시:</strong><br>
+          • "anti-aging 표현을 미국에서 쓸 수 있나요?"<br>
+          • "1번 항목 Drug claim 대안 표현 알려줘"<br>
+          • "AHA 함유 제품 FDA 필수 경고문이 뭔가요?"
+        </div>
+      </div>
+      <div class="chat-msg user">
+        <div class="chat-avatar user">👤</div>
+        <div class="chat-bubble">"anti-aging"이라는 표현을 미국 라벨에서 쓸 수 있나요?</div>
+      </div>
+      <div class="chat-msg bot">
+        <div class="chat-avatar bot">AI</div>
+        <div class="chat-bubble">
+          미국 FDA 기준으로 <strong>"anti-aging"</strong>은 cosmetic claim으로 허용됩니다. 다만, 구조적 변화를 암시하는 표현은 drug claim으로 간주될 수 있습니다.<br><br>
+          <strong style="color:var(--safe);">✓ 허용</strong> — "reduces the appearance of fine lines", "helps skin look younger"<br>
+          <strong style="color:var(--critical);">✗ 금지</strong> — "reverses aging", "eliminates wrinkles", "repairs skin cells"<br><br>
+          <code style="background:var(--bg-subtle);border:1px solid var(--border);padding:2px 6px;border-radius:3px;font-size:12px;">규칙 ID: US-LAB-004 · FD&C Act 201(g)(1)</code>
+          <div class="chat-bubble-ref">근거: FDA "Is It a Cosmetic, a Drug, or Both?" 가이던스</div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chatInput" type="text" placeholder="규제 관련 질문을 입력하세요..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">전송</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/results.js"></script>
+</body>
+</html>

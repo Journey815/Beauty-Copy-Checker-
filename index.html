@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beauty Copy Checker — 뷰티 카피 수출 규제 자동 검토</title>
+  <meta name="description" content="뷰티 브랜드의 해외 수출 카피를 업로드하면 FDA/MoCRA, EU, 한국 화장품법 기준으로 규제 준수 여부를 자동 검토합니다.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ============================================================
+       Landing Page Specific
+       ============================================================ */
+
+    /* Hero */
+    .hero {
+      padding: 100px 48px 80px;
+      max-width: 1280px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 32px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--critical);
+      border-radius: 50%;
+    }
+
+    .hero-headline {
+      font-size: clamp(44px, 5.5vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--text);
+      max-width: 860px;
+      margin-bottom: 28px;
+    }
+
+    .hero-headline em {
+      font-style: normal;
+      color: var(--text-muted);
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 64px;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .hero-stat {
+      padding-right: 32px;
+      margin-right: 32px;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child {
+      border-right: none;
+      padding-right: 0;
+      margin-right: 0;
+    }
+
+    .hero-stat-num {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: -0.01em;
+    }
+
+    /* Problem section */
+    .section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    /* Problems */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .problem-item {
+      background: var(--bg);
+      padding: 36px;
+      transition: var(--t-md);
+    }
+
+    .problem-item:hover {
+      background: var(--bg-white);
+    }
+
+    .problem-icon {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .problem-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .problem-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Features */
+    .features-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 0;
+    }
+
+    .features-sticky {
+      position: sticky;
+      top: 80px;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+
+    .feature-item {
+      background: var(--bg);
+      padding: 28px 32px;
+      cursor: pointer;
+      transition: var(--t);
+      border-left: 3px solid transparent;
+    }
+
+    .feature-item:hover,
+    .feature-item.active {
+      background: var(--bg-white);
+      border-left-color: var(--text);
+    }
+
+    .feature-item-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text-subtle);
+      margin-bottom: 6px;
+    }
+
+    .feature-item-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .feature-panel {
+      display: none;
+    }
+
+    .feature-panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease forwards;
+    }
+
+    .feature-panel-badge {
+      margin-bottom: 24px;
+    }
+
+    .feature-panel-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .feature-panel-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .feature-detail-box {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 24px;
+    }
+
+    .feature-detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+
+    .feature-detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .feature-detail-label {
+      color: var(--text-muted);
+    }
+
+    .feature-detail-value {
+      font-weight: 600;
+    }
+
+    /* How it works */
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .how-step {
+      background: var(--bg);
+      padding: 40px 36px;
+    }
+
+    .how-step-arrow {
+      display: none;
+    }
+
+    .how-step-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-subtle);
+      margin-bottom: 20px;
+    }
+
+    .how-step-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .how-step-desc {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .how-step-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 20px;
+    }
+
+    .how-step-tag {
+      padding: 4px 10px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Country support */
+    .country-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .country-cell {
+      background: var(--bg);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .country-flag {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .country-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .country-reg {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .country-phase {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 2px 8px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 10px;
+      color: var(--text-subtle);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .pricing-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 32px 28px;
+      position: relative;
+      transition: var(--t-md);
+    }
+
+    .pricing-card:hover {
+      border-color: var(--border-md);
+      transform: translateY(-2px);
+    }
+
+    .pricing-card.featured {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--bg);
+    }
+
+    .pricing-card.featured .pricing-desc,
+    .pricing-card.featured .pricing-feature,
+    .pricing-card.featured .pricing-price-unit {
+      color: rgba(245,245,244,0.6);
+    }
+
+    .pricing-card.featured .pricing-divider {
+      border-color: rgba(245,245,244,0.15);
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--critical);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--r-pill);
+      white-space: nowrap;
+    }
+
+    .pricing-plan {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 16px;
+    }
+
+    .pricing-card.featured .pricing-plan {
+      color: rgba(245,245,244,0.5);
+    }
+
+    .pricing-price {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .pricing-price-unit {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .pricing-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .pricing-divider {
+      border-color: var(--border);
+      margin-bottom: 20px;
+    }
+
+    .pricing-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .pricing-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .pricing-feature::before {
+      content: '—';
+      color: var(--text-subtle);
+      font-size: 11px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .pricing-card.featured .pricing-feature::before {
+      color: rgba(245,245,244,0.4);
+    }
+
+    .pricing-cta {
+      width: 100%;
+      padding: 11px;
+      font-size: 13.5px;
+    }
+
+    .pricing-card.featured .btn-secondary {
+      background: rgba(245,245,244,0.1);
+      color: var(--bg);
+      border-color: rgba(245,245,244,0.2);
+    }
+
+    .pricing-card.featured .btn-secondary:hover {
+      background: rgba(245,245,244,0.2);
+    }
+
+    /* CTA Banner */
+    .cta-banner {
+      padding: 80px 48px;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .cta-banner-title {
+      font-size: clamp(24px, 2.8vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      max-width: 560px;
+    }
+
+    .cta-banner-actions {
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="logo-pill">
+      <span class="logo-accent"></span>
+      BeautyCopyChecker
+    </a>
+    <nav class="header-nav">
+      <a href="#features">기능</a>
+      <a href="#how">작동 방식</a>
+      <a href="#pricing">가격</a>
+      <a href="checker.html" class="btn-nav-cta">무료로 시작하기</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">뷰티 수출 규제 자동 검토 플랫폼</div>
+    <h1 class="hero-headline">
+      뷰티 카피,<br>
+      <em>수출 전에</em><br>
+      먼저 검토하세요
+    </h1>
+    <p class="hero-desc">
+      패키지 라벨, 상세페이지, 광고 카피를 업로드하면<br>
+      미국 FDA·MoCRA, EU, 한국 화장품법 기준으로<br>
+      규제 위반과 텍스트 오류를 자동으로 잡아드립니다.
+    </p>
+    <div class="hero-actions">
+      <a href="checker.html" class="btn btn-primary btn-lg">검토 시작하기 →</a>
+      <a href="results.html" class="btn btn-secondary btn-lg">데모 결과 보기</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">95%+</div>
+        <div class="hero-stat-label">규제 위반 검출률</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">70%</div>
+        <div class="hero-stat-label">검토 소요 시간 단축</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">50%</div>
+        <div class="hero-stat-label">수출 서류 반려율 감소</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">10초</div>
+        <div class="hero-stat-label">평균 검토 소요 시간</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">문제 정의</div>
+      <h2 class="section-title">수출할 때마다 반복되는 <br>카피 검토 문제</h2>
+      <div class="problem-grid">
+        <div class="problem-item">
+          <div class="problem-icon">⚖️</div>
+          <div class="problem-title">국가별 규제 불일치</div>
+          <p class="problem-desc">미국 FDA/MoCRA, EU 1223/2009, 중국 NMPA — 수출국마다 화장품 라벨링·광고 규제가 상이하여 전문 인력 없이는 준수 여부 판단이 어렵습니다.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">✍️</div>
+          <div class="problem-title">번역 품질 오류</div>
+          <p class="problem-desc">한국어 원본을 영어·현지어로 번역하는 과정에서 오탈자, 누락, INCI 성분명 오기재가 반복해서 발생합니다.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">🔀</div>
+          <div class="problem-title">검토 기준 비통일</div>
+          <p class="problem-desc">브랜드사 담당자, 수출 대행사, 외부 디자이너 간 검토 기준이 달라 커뮤니케이션 비용이 큽니다.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">🔄</div>
+          <div class="problem-title">높은 서류 반려율</div>
+          <p class="problem-desc">수출 인허가 서류 기재 사항 누락으로 반려 후 재수정·재제출 사이클이 반복되어 수출 일정이 지연됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="section-inner">
+      <div class="section-label">핵심 기능</div>
+      <div class="features-layout">
+        <div class="features-sticky">
+          <h2 class="section-title" style="margin-bottom: 32px;">규제·품질 검토를<br>한 번에</h2>
+          <nav class="feature-list" id="featureNav">
+            <div class="feature-item active" data-panel="0" onclick="switchFeature(0)">
+              <div class="feature-item-num">01</div>
+              <div class="feature-item-title">규제 준수 자동 검증</div>
+            </div>
+            <div class="feature-item" data-panel="1" onclick="switchFeature(1)">
+              <div class="feature-item-num">02</div>
+              <div class="feature-item-title">텍스트 품질 보장</div>
+            </div>
+            <div class="feature-item" data-panel="2" onclick="switchFeature(2)">
+              <div class="feature-item-num">03</div>
+              <div class="feature-item-title">이미지 기반 분석</div>
+            </div>
+            <div class="feature-item" data-panel="3" onclick="switchFeature(3)">
+              <div class="feature-item-num">04</div>
+              <div class="feature-item-title">규제 Q&A 챗봇</div>
+            </div>
+          </nav>
+        </div>
+
+        <div>
+          <!-- Panel 0 -->
+          <div class="feature-panel active" id="panel-0">
+            <div class="feature-panel-badge">
+              <span class="badge badge-critical">Critical</span>
+              <span class="badge badge-warning" style="margin-left: 6px;">Major</span>
+            </div>
+            <h3 class="feature-panel-title">국가별 규제 DB 기반<br>자동 준수 검증</h3>
+            <p class="feature-panel-desc">
+              미국 FDA/MoCRA, 한국 화장품법, EU 1223/2009 규제 룰 엔진이 Drug Claim, INCI 성분 표기, 필수 경고문, 용량 표시 등을 자동으로 검증합니다. 규제 위반 시 법적 근거(CFR, Regulation 번호)와 함께 구체적 수정 가이드를 제공합니다.
+            </p>
+            <div class="feature-detail-box">
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">Drug Claim 감지</span>
+                <span class="feature-detail-value">100+ 패턴 DB</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">INCI 성분 검증</span>
+                <span class="feature-detail-value">500개 성분 DB</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">필수 경고문 체크</span>
+                <span class="feature-detail-value">AHA·자외선차단 등</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">순함량 폰트 규정</span>
+                <span class="feature-detail-value">PDP 면적 기반 자동 계산</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">규제 근거</span>
+                <span class="feature-detail-value">법령 원문 링크 제공</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 1 -->
+          <div class="feature-panel" id="panel-1">
+            <div class="feature-panel-badge">
+              <span class="badge badge-warning">텍스트 품질</span>
+            </div>
+            <h3 class="feature-panel-title">오탈자·누락·띄어쓰기<br>자동 감지 및 교정</h3>
+            <p class="feature-panel-desc">
+              한국어(부산대 맞춤법 검사기)와 영어(LanguageTool)를 동시에 검사합니다. INCI 성분명 스펠링, 영문 compound word 띄어쓰기, 필수 기재 사항 누락 여부를 자동으로 잡아드립니다.
+            </p>
+            <div class="feature-detail-box">
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">한국어 맞춤법</span>
+                <span class="feature-detail-value">부산대 맞춤법 API</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">영문 스펠링</span>
+                <span class="feature-detail-value">LanguageTool</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">INCI 명칭 정확성</span>
+                <span class="feature-detail-value">INCI DB 실시간 대조</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">함량순 정렬</span>
+                <span class="feature-detail-value">21 CFR 701.3 기준</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2 -->
+          <div class="feature-panel" id="panel-2">
+            <div class="feature-panel-badge">
+              <span class="badge badge-info">이미지 분석</span>
+            </div>
+            <h3 class="feature-panel-title">이미지 위에 직접<br>문제 영역 시각화</h3>
+            <p class="feature-panel-desc">
+              패키지 시안 이미지를 업로드하면 분석 결과가 이미지 위에 컬러 핀으로 표시됩니다. ●빨강(수정 필수) / ▲노랑(확인 필요) / ✓초록(안전)으로 한눈에 파악할 수 있습니다.
+            </p>
+            <div class="feature-detail-box">
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">핀 인터랙션</span>
+                <span class="feature-detail-value">클릭 시 상세 이동</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">담당자 필터</span>
+                <span class="feature-detail-value">디자이너 / 제조사 / 에이전시</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">PDF 리포트</span>
+                <span class="feature-detail-value">주석 포함 내보내기</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">공유 링크</span>
+                <span class="feature-detail-value">로그인 없이 열람 가능</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3 -->
+          <div class="feature-panel" id="panel-3">
+            <div class="feature-panel-badge">
+              <span class="badge badge-safe">AI 챗봇</span>
+            </div>
+            <h3 class="feature-panel-title">국가별 규제 전문<br>Q&A 챗봇</h3>
+            <p class="feature-panel-desc">
+              "anti-aging 표현을 미국에서 쓸 수 있나요?" — 검토 결과 화면에서 바로 질문하거나, 자유롭게 규제 관련 질의응답을 할 수 있습니다. Rule DB 기반 정확한 답변에 법적 근거를 항상 함께 제공합니다.
+            </p>
+            <div class="feature-detail-box">
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">검토 결과 연동</span>
+                <span class="feature-detail-value">핀 클릭 → 즉시 질문</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">대안 표현 요청</span>
+                <span class="feature-detail-value">AI 수정 제안 생성</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">규제 비교</span>
+                <span class="feature-detail-value">미국 vs EU 동시 비교</span>
+              </div>
+              <div class="feature-detail-row">
+                <span class="feature-detail-label">면책 고지</span>
+                <span class="feature-detail-value">법률 자문이 아님 명시</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how">
+    <div class="section-inner">
+      <div class="section-label">작동 방식</div>
+      <h2 class="section-title">업로드하고, 선택하고,<br>결과를 받으세요</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">STEP 01</div>
+          <h3 class="how-step-title">카피 입력</h3>
+          <p class="how-step-desc">패키지 라벨 텍스트를 복사해서 붙여넣거나, 파일을 업로드합니다. 패키지 치수와 폰트 크기도 함께 입력하면 레이아웃 규제까지 검토합니다.</p>
+          <div class="how-step-tags">
+            <span class="how-step-tag">텍스트 입력</span>
+            <span class="how-step-tag">패키지 치수</span>
+            <span class="how-step-tag">PDF/이미지</span>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">STEP 02</div>
+          <h3 class="how-step-title">대상국 & 유형 선택</h3>
+          <p class="how-step-desc">수출 대상국(미국·한국·EU 등)과 콘텐츠 유형(패키지 라벨·상세페이지·광고)을 선택합니다. 선택한 국가의 규제만 적용됩니다.</p>
+          <div class="how-step-tags">
+            <span class="how-step-tag">🇺🇸 FDA/MoCRA</span>
+            <span class="how-step-tag">🇰🇷 화장품법</span>
+            <span class="how-step-tag">🇪🇺 EU 1223</span>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">STEP 03</div>
+          <h3 class="how-step-title">결과 확인 & 수정</h3>
+          <p class="how-step-desc">10초 내로 규제 위반과 텍스트 오류를 항목별로 받아봅니다. 수정 가이드와 근거 법령을 바탕으로 카피를 수정하고 재검토합니다.</p>
+          <div class="how-step-tags">
+            <span class="how-step-tag">● 수정 필수</span>
+            <span class="how-step-tag">▲ 확인 필요</span>
+            <span class="how-step-tag">✓ 안전</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Country support -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">지원 국가</div>
+      <h2 class="section-title">주요 수출국 규제를<br>모두 커버합니다</h2>
+      <div class="country-grid">
+        <div class="country-cell">
+          <div class="country-flag">🇺🇸</div>
+          <div class="country-name">미국</div>
+          <div class="country-reg">FDA / MoCRA</div>
+          <div class="country-phase">MVP</div>
+        </div>
+        <div class="country-cell">
+          <div class="country-flag">🇰🇷</div>
+          <div class="country-name">한국</div>
+          <div class="country-reg">식약처 / 화장품법</div>
+          <div class="country-phase">MVP</div>
+        </div>
+        <div class="country-cell">
+          <div class="country-flag">🇪🇺</div>
+          <div class="country-name">EU</div>
+          <div class="country-reg">EC 1223/2009</div>
+          <div class="country-phase">Phase 2</div>
+        </div>
+        <div class="country-cell">
+          <div class="country-flag">🇨🇳</div>
+          <div class="country-name">중국</div>
+          <div class="country-reg">NMPA / CSAR</div>
+          <div class="country-phase">Phase 3</div>
+        </div>
+        <div class="country-cell">
+          <div class="country-flag">🌏</div>
+          <div class="country-name">ASEAN</div>
+          <div class="country-reg">ACD (10개국)</div>
+          <div class="country-phase">Phase 3</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <div class="section-inner">
+      <div class="section-label">가격 플랜</div>
+      <h2 class="section-title">팀 규모에 맞는<br>플랜을 선택하세요</h2>
+      <div class="pricing-grid">
+
+        <div class="pricing-card">
+          <div class="pricing-plan">Free</div>
+          <div class="pricing-price">무료</div>
+          <div class="pricing-price-unit">영구 무료</div>
+          <div class="pricing-desc">개인 디자이너, 서비스 체험</div>
+          <hr class="pricing-divider">
+          <div class="pricing-features">
+            <div class="pricing-feature">월 5건 검토</div>
+            <div class="pricing-feature">미국 FDA 규제만</div>
+            <div class="pricing-feature">기본 텍스트 품질 검사</div>
+            <div class="pricing-feature">결과 리포트 PDF</div>
+          </div>
+          <a href="checker.html" class="btn btn-secondary pricing-cta">무료로 시작</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-badge">가장 인기</div>
+          <div class="pricing-plan">Pro</div>
+          <div class="pricing-price">₩49,000</div>
+          <div class="pricing-price-unit">/ 월</div>
+          <div class="pricing-desc">브랜드 내부, 소규모 대행사</div>
+          <hr class="pricing-divider">
+          <div class="pricing-features">
+            <div class="pricing-feature">월 50건 검토</div>
+            <div class="pricing-feature">2개국 규제 (미국 + 선택 1)</div>
+            <div class="pricing-feature">OCR 파일 업로드</div>
+            <div class="pricing-feature">팀 3명 초대</div>
+            <div class="pricing-feature">규제 Q&A 챗봇</div>
+          </div>
+          <a href="checker.html" class="btn btn-secondary pricing-cta">시작하기</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-plan">Business</div>
+          <div class="pricing-price">₩199,000</div>
+          <div class="pricing-price-unit">/ 월</div>
+          <div class="pricing-desc">대행사, 중대형 브랜드</div>
+          <hr class="pricing-divider">
+          <div class="pricing-features">
+            <div class="pricing-feature">무제한 검토</div>
+            <div class="pricing-feature">전체 국가 규제</div>
+            <div class="pricing-feature">REST API 제공</div>
+            <div class="pricing-feature">팀 무제한</div>
+            <div class="pricing-feature">검토 이력 관리</div>
+            <div class="pricing-feature">산출물 대조 기능</div>
+          </div>
+          <a href="checker.html" class="btn btn-secondary pricing-cta">시작하기</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-plan">Enterprise</div>
+          <div class="pricing-price">문의</div>
+          <div class="pricing-price-unit">맞춤 견적</div>
+          <div class="pricing-desc">대형 유통사, 대기업 브랜드</div>
+          <hr class="pricing-divider">
+          <div class="pricing-features">
+            <div class="pricing-feature">커스텀 규칙 설정</div>
+            <div class="pricing-feature">SLA 보장</div>
+            <div class="pricing-feature">전담 지원</div>
+            <div class="pricing-feature">온프레미스 옵션</div>
+            <div class="pricing-feature">SOC2 인증 예정</div>
+          </div>
+          <a href="mailto:hello@bcc.ai" class="btn btn-secondary pricing-cta">문의하기</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div style="border-bottom: 1px solid var(--border);">
+    <div class="cta-banner">
+      <h2 class="cta-banner-title">수출 전에 한 번만 검토하면<br>반려 사이클을 끊을 수 있습니다.</h2>
+      <div class="cta-banner-actions">
+        <a href="checker.html" class="btn btn-primary btn-lg">지금 무료로 시작하기</a>
+        <a href="results.html" class="btn btn-secondary btn-lg">데모 보기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-col-title">제품</div>
+        <a href="#features">기능 소개</a>
+        <a href="#how">작동 방식</a>
+        <a href="#pricing">가격</a>
+        <a href="checker.html">검토 시작</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">규제 지원</div>
+        <a href="#">미국 FDA / MoCRA</a>
+        <a href="#">한국 화장품법</a>
+        <a href="#">EU 1223/2009</a>
+        <a href="#">INCI 성분 DB</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">리소스</div>
+        <a href="#">규제 가이드</a>
+        <a href="#">API 문서</a>
+        <a href="#">케이스 스터디</a>
+        <a href="#">규제 Q&A</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">회사</div>
+        <p>이 서비스는 법률 자문이 아닙니다. 모든 결과는 참고용이며, 최종 판단은 규제 전문가와 함께 하시기 바랍니다.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Beauty Copy Checker. All rights reserved.</p>
+      <p>문의: hello@bcc.ai</p>
+    </div>
+  </footer>
+
+  <script>
+    function switchFeature(index) {
+      document.querySelectorAll('.feature-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+      document.querySelectorAll('.feature-panel').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    // Scroll reveal — CSS class based, handles viewport-initial elements
+    const revealEls = document.querySelectorAll('.problem-item, .how-step, .country-cell, .pricing-card');
+    revealEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = [...entry.target.parentElement.children].indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }, Math.min(idx * 70, 200));
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>

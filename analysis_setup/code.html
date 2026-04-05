@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analysis Setup | Alexandria Compliance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#737784",
+                    "inverse-on-surface": "#f2f0f1",
+                    "background": "#faf9fa",
+                    "primary-fixed": "#d9e2ff",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#e7ebff",
+                    "inverse-primary": "#b1c5ff",
+                    "on-tertiary-fixed": "#211b00",
+                    "secondary": "#5a5f63",
+                    "on-background": "#1b1c1d",
+                    "secondary-fixed-dim": "#c2c7cc",
+                    "surface-dim": "#dbdadb",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c3c6d5",
+                    "primary": "#094cb2",
+                    "surface-container-highest": "#e3e2e3",
+                    "on-surface-variant": "#434653",
+                    "tertiary-container": "#bfab49",
+                    "surface-container-high": "#e9e8e9",
+                    "on-surface": "#1b1c1d",
+                    "surface-variant": "#e3e2e3",
+                    "surface": "#faf9fa",
+                    "on-primary-fixed": "#001946",
+                    "tertiary-fixed-dim": "#dcc661",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#6d5e00",
+                    "secondary-container": "#dfe3e8",
+                    "on-tertiary-container": "#4a3f00",
+                    "tertiary-fixed": "#f9e37a",
+                    "inverse-surface": "#303031",
+                    "surface-tint": "#2259bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f5f3f4",
+                    "primary-fixed-dim": "#b1c5ff",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-container": "#3366cc",
+                    "surface-container": "#efedee",
+                    "secondary-fixed": "#dfe3e8",
+                    "on-tertiary-fixed-variant": "#524600",
+                    "on-secondary-fixed-variant": "#42474b",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#00419d",
+                    "on-secondary-fixed": "#171c20",
+                    "on-secondary-container": "#606569",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#faf9fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Inter"],
+                    "label": ["Public Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .font-label { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm dark:shadow-none flex justify-between items-center px-8 h-16 w-full max-w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-serif font-bold text-slate-900 dark:text-slate-100">Alexandria Compliance</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="font-serif tracking-tight text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors duration-200 ease-in-out" href="#">Dashboard</a>
+<a class="font-serif tracking-tight text-blue-700 dark:text-blue-400 border-b-2 border-blue-700 dark:border-blue-400 transition-colors duration-200 ease-in-out" href="#">Projects</a>
+<a class="font-serif tracking-tight text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors duration-200 ease-in-out" href="#">Archive</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-1.5">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm font-label w-48" placeholder="Search regulations..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="Regulatory Specialist Profile" class="w-8 h-8 rounded-full object-cover ml-2 ring-2 ring-primary/10" data-alt="professional portrait of a regulatory specialist in a bright office setting with neutral colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQYgpv93bIilGOWMrdM_D34owGxNt5P3pf0NlHPAs5JXe622qFbChZn8l53Eea08T9SghymjdA07EnL_fYNvp0hsZ-ylTCS-X9tXFxisqePjb28D4o7XDGJeJB6b1sMajFtEc9kMueONlQVHkXHrOiOyJHj4b_YUtOZAFmk3XsKrZrIWL0B2FJR1Slpk-YWNnw6zN_Gwv4cbiMkGv_h5bW2lJUnuI7ccO8cJWllxnlQUHEMI579jkIYV8sj3Xx81pufBTgEf1AFmw3"/>
+</div>
+</nav>
+<!-- SideNavBar (Suppressed for transactional layout but structure maintained) -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-slate-50 dark:bg-slate-950 hidden md:flex flex-col pt-20 pb-6 border-r border-slate-200/50">
+<div class="px-6 mb-8">
+<h2 class="text-lg font-serif italic text-blue-800 dark:text-blue-300">Global Regulatory</h2>
+<p class="text-xs font-label font-medium tracking-wide text-slate-500 uppercase">Enterprise Tier</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-100 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label font-medium tracking-wide">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-blue-700 font-bold border-r-4 border-blue-700 bg-blue-50/50 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="folder_managed">folder_managed</span>
+<span class="font-label font-medium tracking-wide">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-100 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="barcode_scanner">barcode_scanner</span>
+<span class="font-label font-medium tracking-wide">Label Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-500 hover:bg-slate-100 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+<span class="font-label font-medium tracking-wide">Web Audit</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl font-label font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Analysis
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-16 min-h-screen bg-background">
+<div class="max-w-5xl mx-auto px-8 py-12">
+<!-- Header Section -->
+<header class="mb-12">
+<div class="flex items-center gap-2 text-sm font-label text-tertiary mb-4">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+<span>Back to Projects</span>
+</div>
+<h1 class="text-4xl font-headline font-bold text-on-surface leading-tight mb-2">New Regulatory Analysis</h1>
+<p class="text-on-surface-variant max-w-2xl font-body">Configure your product's compliance parameters. Our AI-driven engine will scan your labels against the latest global regulatory frameworks.</p>
+</header>
+<!-- Multi-Step Stepper -->
+<div class="flex items-center gap-4 mb-10 overflow-x-auto pb-4">
+<div class="flex items-center gap-3 whitespace-nowrap">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold">1</div>
+<span class="font-label font-bold text-primary">Content Input</span>
+</div>
+<div class="h-[1px] w-12 bg-outline-variant"></div>
+<div class="flex items-center gap-3 whitespace-nowrap">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center text-xs font-bold">2</div>
+<span class="font-label text-on-surface-variant">Target Markets</span>
+</div>
+<div class="h-[1px] w-12 bg-outline-variant"></div>
+<div class="flex items-center gap-3 whitespace-nowrap">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center text-xs font-bold">3</div>
+<span class="font-label text-on-surface-variant">Package Specs</span>
+</div>
+</div>
+<!-- Bento Grid Layout for Form -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Step 1: Content Input (Main Feature) -->
+<section class="lg:col-span-8 space-y-8">
+<div class="bg-surface-container-lowest p-8 rounded-full shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-bold">1. Label Content</h3>
+<div class="flex bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 bg-white shadow-sm rounded-md text-xs font-label font-bold text-primary">Upload File</button>
+<button class="px-4 py-1.5 text-xs font-label text-on-surface-variant">Manual Text</button>
+</div>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-12 text-center bg-surface-bright/50 group hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline mb-4 block group-hover:scale-110 transition-transform" data-icon="upload_file">upload_file</span>
+<p class="font-label text-lg font-medium mb-1">Drag and drop your label artwork</p>
+<p class="text-sm text-on-surface-variant mb-6">PDF, PNG, or JPG accepted (Max 25MB)</p>
+<button class="px-6 py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-primary font-bold rounded-lg transition-colors font-label">
+                                Select from Local Drive
+                            </button>
+</div>
+<div class="mt-8">
+<label class="block text-sm font-label font-bold mb-2 uppercase tracking-tighter text-outline">Project Name</label>
+<input class="w-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary rounded-lg py-3 px-4 font-body" placeholder="e.g., Lavender Calm Hand Cream - Q4 Launch" type="text"/>
+</div>
+</div>
+<!-- Navigation Footer -->
+<div class="flex justify-between items-center pt-8">
+<button class="px-8 py-3 font-label font-bold text-on-surface-variant hover:underline decoration-tertiary decoration-2 underline-offset-4">
+                            Save Draft
+                        </button>
+<button class="px-10 py-3 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-label font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                            Continue to Markets
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Sidebar Contextual Settings -->
+<aside class="lg:col-span-4 space-y-8">
+<!-- Step 2: Target Markets -->
+<div class="bg-surface-container p-6 rounded-xl">
+<h3 class="text-sm font-label font-bold uppercase tracking-widest text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="public">public</span>
+                            2. Target Markets
+                        </h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg border-2 border-primary/20">
+<div class="flex items-center gap-3">
+<img alt="US Flag" class="w-6 h-6 rounded-full object-cover" data-alt="American flag texture in a clean circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2PhRmiAfrMvqS4nmNHzIOxB5e_MVYNrm4deNNhWGtDKe_gO5YZ7Kz6bO_m9fY1P9hwc54Bvq7C6Ue3b_SOS_H3g1vsaYbDAahVjEjQFtbuSmD5Jy09VPMhw61UL0eTC2R2r-6pnw2Whbtew7eM6324vYj0WQo48yOXDmgg8zz8DI5YjefK473qjgpUyT4g5JxJt7z-LyzuLqpSikxgG6ZutM1UQtie_Xp7gwkp96A4qAcRG_2Ymjz_tAkhjYNMJzLzQQ4w7MTasOV"/>
+<div>
+<p class="font-label font-bold text-sm">US FDA / MoCRA</p>
+<p class="text-[10px] text-tertiary font-medium">Cosmetic Modernization Act 2024</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/30 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<img alt="Korea Flag" class="w-6 h-6 rounded-full object-cover" data-alt="South Korean flag texture in a clean circular crop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBcT0oyPOZmSkpjNvn-__5VNpkFY7_zIxLTSDu29yy2CD4cRTAi2Y4j1P_GZJ1h8d38mSJpeJeaVMh3rXB7BrazXsjICnOV_7dTXt_G-zzBcwLCC6n7vdkG8V7J3bYZDX5ypwZVTEBWNmqJLWvN0vKGXs52f6bNib7bkY8HtdS5Ql5umcl-4egjZxWkIO4VJ5HNUKf5N-TT36yZqazpkuUYrH_MAbvEbV5HKb0XorX2Ry05mu2-qOZCl1Jxv46Vr0yqG7w31aA7czP"/>
+<div>
+<p class="font-label font-bold text-sm">KR MFDS</p>
+<p class="text-[10px] text-on-surface-variant">Ministry of Food &amp; Drug Safety</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="add_circle">add_circle</span>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-outline-variant rounded-lg text-xs font-label font-bold text-outline hover:text-primary hover:border-primary transition-colors">
+                                Browse Other Jurisdictions
+                            </button>
+</div>
+</div>
+<!-- Step 3: Package Dimensions -->
+<div class="bg-surface-container-high p-6 rounded-xl">
+<h3 class="text-sm font-label font-bold uppercase tracking-widest text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="square_foot">square_foot</span>
+                            3. Dimensions
+                        </h3>
+<div class="space-y-4">
+<div>
+<label class="block text-[10px] font-label font-bold text-on-surface-variant mb-1 uppercase">Package Type</label>
+<select class="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary rounded-lg text-sm font-body py-2">
+<option>Cylindrical Container (Tube)</option>
+<option>Rectangular Box (Outer)</option>
+<option>Vial / Jar</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-[10px] font-label font-bold text-on-surface-variant mb-1 uppercase">PDP Width (mm)</label>
+<input class="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary rounded-lg text-sm font-body py-2" type="number" value="45"/>
+</div>
+<div>
+<label class="block text-[10px] font-label font-bold text-on-surface-variant mb-1 uppercase">PDP Height (mm)</label>
+<input class="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary rounded-lg text-sm font-body py-2" type="number" value="120"/>
+</div>
+</div>
+<div>
+<label class="block text-[10px] font-label font-bold text-on-surface-variant mb-1 uppercase">Smallest Font Size (pt)</label>
+<div class="flex items-center gap-3">
+<input class="flex-1 accent-primary" type="range"/>
+<span class="text-xs font-bold font-label bg-white px-2 py-1 rounded">6.0pt</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Summary Card -->
+<div class="bg-primary/5 p-6 rounded-xl border-l-4 border-primary">
+<p class="text-xs font-label font-bold text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                            Analysis Estimator
+                        </p>
+<p class="text-xs text-on-surface-variant font-body">Scanning 1 jurisdiction for standard labeling compliance. Expected turnaround: <strong class="text-on-surface">2.5 seconds.</strong></p>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/90 backdrop-blur-lg flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-label font-bold uppercase">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="folder_managed">folder_managed</span>
+<span class="text-[10px] font-label font-bold uppercase">Projects</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] font-label font-bold uppercase">Setup</span>
+</a>
+</nav>
+</body></html>
