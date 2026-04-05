@@ -364,78 +364,141 @@ function toggleChatbot() {
   icon.textContent = isHidden ? '▲' : '▼';
 }
 
+// ─── Chatbot Knowledge Base ──────────────────────────────────
 const CHAT_RESPONSES = {
   default: {
-    text: '죄송합니다, 해당 질문에 대한 정확한 규제 정보를 찾지 못했습니다. 보다 구체적인 성분명, 표현, 또는 규제명을 포함해 질문해 주세요.<br><br>예: "AHA 경고문", "drug claim 대안", "net quantity 표기법"',
+    text: '해당 질문에 대한 정확한 규제 정보를 찾지 못했습니다. 아래 주제로 질문해 보세요.<br><br>• <strong>규제 주제:</strong> drug claim, AHA 경고문, 미백, 주름, 순함량(oz), INCI 성분, 주소, 폰트 크기, 바코드, MoCRA, 기능성 화장품<br>• <strong>분석 결과:</strong> "1번 항목", "2번 이슈" 등 번호로 질문<br>• <strong>대안 표현:</strong> "치료 대안", "완치 대안" 등',
     ref: ''
   },
-  'drug': {
-    text: '<strong>Drug Claim</strong>이란 화장품 라벨이나 광고에서 의약품적 효능을 주장하는 표현입니다.<br><br>❌ 금지 표현:<br>• "치료(treat)", "예방(prevent)", "치유(cure)"<br>• "피부 재생", "주름 제거", "세포 복구"<br><br>✅ 허용 표현 (cosmetic claim):<br>• "보습", "피부 결 개선", "유연" <br>• "fine line의 외관 개선", "피부를 촉촉하게"<br><br><strong style="color:var(--safe)">원칙: 구조적 변화 → drug / 외관 변화 → cosmetic</strong>',
-    ref: '근거: FD&C Act 201(g)(1) | Rule: US-LAB-004'
+  drug: {
+    text: '<strong>Drug Claim vs Cosmetic Claim (FD&C Act 201(g)(1))</strong><br><br>FDA는 "신체 구조·기능에 영향을 미친다"는 표현을 drug claim으로 분류합니다.<br><br>❌ <strong>금지 (drug claim)</strong>:<br>• treat, cure, prevent, heal, repair<br>• 치료, 완치, 예방, 피부 재생, 세포 복구, 주름 제거<br><br>✅ <strong>허용 (cosmetic claim)</strong>:<br>• 보습, 피부 결 개선, 피부를 촉촉하게<br>• "reduces the appearance of fine lines"<br>• "helps skin look smoother"<br><br><strong style="color:var(--safe)">판단 기준: 구조적 변화 → drug / 외관 변화 → cosmetic</strong><br><br>한국 화장품법 제13조에서도 의약품 오인 표현을 동일하게 금지합니다.',
+    ref: '근거: FD&C Act 201(g)(1), 21 CFR 700-740, 화장품법 제13조 | Rule: US-LAB-004, KR-AD-001'
   },
-  'aha': {
-    text: '<strong>AHA(알파하이드록시산)</strong> 함유 제품의 FDA 필수 경고문:<br><br><code style="background:var(--bg-subtle);border:1px solid var(--border);padding:8px 10px;display:block;border-radius:4px;font-size:11.5px;line-height:1.6;margin:8px 0;">Sunburn Alert: This product contains an alpha hydroxy acid (AHA) that may increase your skin\'s sensitivity to the sun and particularly the possibility of sunburn. Use a sunscreen, wear protective clothing, and limit sun exposure while using this product and for a week afterwards.</code><br>이 경고문 누락 시 <strong style="color:var(--critical)">Critical 위반</strong>(US-LAB-005)입니다.',
-    ref: '근거: 21 CFR 740.19'
+  aha: {
+    text: '<strong>AHA 함유 제품 필수 경고문 (21 CFR 740.19)</strong><br><br>Glycolic Acid, Lactic Acid, Citric Acid, Malic Acid, Tartaric Acid 등 AHA 성분이 포함된 제품은 아래 경고문이 <strong style="color:var(--critical)">필수</strong>입니다:<br><br><code style="background:var(--bg-subtle);border:1px solid var(--border);padding:8px 10px;display:block;border-radius:4px;font-size:11.5px;line-height:1.6;margin:8px 0;">Sunburn Alert: This product contains an alpha hydroxy acid (AHA) that may increase your skin\'s sensitivity to the sun and particularly the possibility of sunburn. Use a sunscreen, wear protective clothing, and limit sun exposure while using this product and for a week afterwards.</code><br>이 경고문이 누락되면 <strong style="color:var(--critical)">Critical 위반</strong>입니다. 경고문 폰트도 21 CFR 740 기준을 충족해야 합니다.',
+    ref: '근거: 21 CFR 740.19 | Rule: US-LAB-005, US-LAB-008'
   },
-  'whitening': {
-    text: '<strong>"Whitening / 미백"</strong> 표현의 국가별 규제:<br><br>🇺🇸 미국: "whitening"은 cosmetic claim으로 허용. 단 "skin lightening"은 OTC drug으로 분류 가능<br>🇰🇷 한국: 미백 기능성 화장품 심사 필요 (KR-LAB-002)<br>🇨🇳 중국: 특수화장품(미백) 등록 필수<br>🇪🇺 EU: 규제된 성분(예: hydroquinone) 포함 시 금지<br><br>→ <strong>"brightening"</strong>이 더 안전한 대안입니다.',
-    ref: '근거: 21 CFR 310.545(a)(13), 한국 화장품법 4조'
+  whitening: {
+    text: '<strong>"Whitening / 미백" 국가별 규제</strong><br><br>🇺🇸 <strong>미국</strong>: "whitening"은 cosmetic claim으로 허용. 단, "skin lightening"은 OTC drug으로 분류될 수 있음 (21 CFR 310.545(a)(13))<br><br>🇰🇷 <strong>한국</strong>: "미백" 기능을 표방하면 기능성 화장품 심사 필수 (화장품법 제4조, KR-LAB-002). 심사 없이 "미백" 사용 시 위반<br><br>🇨🇳 <strong>중국</strong>: 특수화장품(미백) 등록 필수<br>🇪🇺 <strong>EU</strong>: Hydroquinone 등 규제 성분 포함 시 금지<br><br>→ <strong>"brightening", "luminous", "radiance"</strong>가 글로벌 안전 대안입니다.',
+    ref: '근거: 21 CFR 310.545(a)(13), 화장품법 제4조 | Rule: US-LAB-004, KR-LAB-002'
   },
-  'antiaging': {
-    text: 'FDA 기준 <strong>"anti-aging"</strong> 표현:<br><br>✅ 허용: "reduces the appearance of fine lines", "helps skin look younger"<br>❌ 금지: "reverses aging", "eliminates wrinkles", "repairs skin cells"<br><br>핵심은 "외관(appearance)" 개선 vs "실제 구조 변화" 구분입니다.',
-    ref: '근거: FD&C Act 201(g)(1) | Rule: US-LAB-004'
+  antiaging: {
+    text: '<strong>"Anti-aging" 표현 규제 (FDA / 식약처)</strong><br><br>🇺🇸 FDA 기준:<br>✅ 허용: "reduces the appearance of fine lines", "helps skin look younger", "visibly firms"<br>❌ 금지: "reverses aging", "eliminates wrinkles", "repairs skin cells", "rejuvenates at cellular level"<br><br>🇰🇷 식약처 기준:<br>✅ 허용: "피부 결 개선", "탄력 케어"<br>❌ 금지: "주름 제거", "노화 방지", "세포 재생"<br>⚠️ "주름개선" 표방 시 기능성 화장품 심사 필요 (KR-LAB-002)<br><br><strong style="color:var(--safe)">핵심: "외관(appearance)" 개선은 OK / "실제 구조 변화"는 drug claim</strong>',
+    ref: '근거: FD&C Act 201(g)(1), 화장품법 제4조, 제13조 | Rule: US-LAB-004, KR-LAB-002'
   },
-  'oz': {
-    text: '<strong>Net Quantity(순함량) 표시 규정 (21 CFR 701.13)</strong>:<br><br>미국 수출 화장품에는 <strong>유체 oz (fl oz)</strong> 단위가 필수입니다.<br><br>올바른 형식: <code style="background:var(--bg-subtle);border:1px solid var(--border);padding:2px 6px;border-radius:3px;">Net Wt. 150 ml / 5 fl oz</code><br><br>정확한 변환: 150ml ÷ 29.5735 ≈ <strong>5.07 fl oz → 표기: 5 fl oz</strong><br><br>추가로 패키지 PDP 면적에 따라 폰트 최소 높이 규정도 있습니다.',
+  oz: {
+    text: '<strong>Net Quantity 순함량 표시 (21 CFR 701.13)</strong><br><br>미국 수출 화장품에는 반드시 <strong>oz 또는 fl oz</strong> 단위를 병기해야 합니다.<br><br>✅ 올바른 형식:<br><code style="background:var(--bg-subtle);border:1px solid var(--border);padding:2px 6px;border-radius:3px;">Net Wt. 150 ml / 5 fl oz</code><br><br><strong>변환 공식:</strong><br>• 액체: ml ÷ 29.5735 = fl oz (150ml → 5.07 → "5 fl oz")<br>• 고체: g ÷ 28.3495 = oz (50g → 1.76 → "1.76 oz")<br><br><strong>PDP 면적별 폰트 최소 높이:</strong><br>• ≤5 sq in → 1.6mm (1/16 in)<br>• ≤25 sq in → 3.2mm (1/8 in)<br>• ≤100 sq in → 4.8mm (3/16 in)<br>• ≤400 sq in → 6.4mm (1/4 in)<br>• >400 sq in → 12.7mm (1/2 in)',
     ref: '근거: 21 CFR 701.13 | Rule: US-LAB-002, US-LAB-006'
   },
-  'inci': {
-    text: '<strong>INCI 성분 표기 규정 (21 CFR 701.3)</strong>:<br><br>• 모든 성분을 INCI 국제 명칭으로 표기<br>• 함량 내림차순 정렬 (1% 이하 성분은 순서 무관)<br>• 향료는 "Fragrance" 또는 개별 성분명<br><br>흔한 실수:<br>❌ "Glycerln" → ✅ "Glycerin"<br>❌ "Water" → ✅ "Aqua"<br>❌ "Vitamin C" → ✅ "Ascorbic Acid"',
-    ref: '근거: 21 CFR 701.3 | Rule: US-LAB-001'
+  inci: {
+    text: '<strong>INCI 성분 표기 규정</strong><br><br>🇺🇸 <strong>FDA (21 CFR 701.3)</strong>:<br>• 모든 성분을 INCI 국제 명칭으로 표기<br>• 함량 내림차순 정렬 (1% 이하 성분은 순서 무관)<br>• 향료: "Fragrance" 통합 표기 또는 개별 성분명<br>• 색소: CI 번호 또는 FDA 승인 색소명<br><br>🇰🇷 <strong>식약처 (시행규칙 제19조)</strong>:<br>• INCI 명칭 또는 대한화장품협회 지정 한글명 사용<br><br><strong>흔한 실수:</strong><br>❌ "Glycerln" → ✅ "Glycerin"<br>❌ "Water" → ✅ "Aqua"<br>❌ "Vitamin C" → ✅ "Ascorbic Acid"<br>❌ "Vitamin E" → ✅ "Tocopherol"',
+    ref: '근거: 21 CFR 701.3, 화장품법 시행규칙 제19조 | Rule: US-LAB-001, KR-LAB-001'
   },
-  'address': {
-    text: '<strong>제조사/유통사 정보 표기 규정 (21 CFR 701.12)</strong>:<br><br>미국 수출 화장품에는 아래 중 하나가 필수:<br>• 제조사 미국 주소 (City, State, ZIP)<br>• 미국 내 유통업자(Distributor) 주소<br><br>✅ 올바른 형식:<br><code style="background:var(--bg-subtle);border:1px solid var(--border);padding:4px 8px;display:block;border-radius:3px;margin:6px 0;font-size:12px;">Distributed by: ABC Beauty USA Inc.<br>Los Angeles, CA 90001 USA</code>',
+  address: {
+    text: '<strong>제조사/유통사 정보 (21 CFR 701.12)</strong><br><br>미국 수출 화장품에는 아래 중 하나가 필수:<br>• 제조사의 미국 주소<br>• 미국 내 유통업자(Distributor) 주소<br><br>✅ 올바른 형식:<br><code style="background:var(--bg-subtle);border:1px solid var(--border);padding:4px 8px;display:block;border-radius:3px;margin:6px 0;font-size:12px;">Distributed by: ABC Beauty USA Inc.<br>Los Angeles, CA 90001, USA</code><br><br>⚠️ 반드시 <strong>City, State(2글자 약자), ZIP(5자리)</strong> 형식이어야 합니다.<br>한국 주소만 있으면 <strong style="color:var(--critical)">Critical 위반</strong>입니다.',
     ref: '근거: 21 CFR 701.12 | Rule: US-LAB-003'
+  },
+  mocra: {
+    text: '<strong>MoCRA (Modernization of Cosmetics Regulation Act, 2022)</strong><br><br>2022년 시행된 미국 화장품 규제 현대화법의 주요 요구사항:<br><br>• <strong>시설 등록</strong>: 화장품 제조·가공 시설 FDA 등록 의무<br>• <strong>제품 등록</strong>: 시판 화장품의 성분·라벨 정보 제출<br>• <strong>이상반응 보고</strong>: 심각한 부작용 15영업일 내 FDA 보고<br>• <strong>GMP</strong>: 우수 제조관리 기준 준수<br>• <strong>안전성 입증</strong>: 제품 안전성에 대한 적절한 근거 보유<br>• <strong>향료 공개</strong>: "Fragrance" 내 알레르기 유발 성분 공개 (단계적 시행)<br><br>⚠️ 한국에서 미국으로 수출하는 화장품도 MoCRA 적용 대상입니다.',
+    ref: '근거: FD&C Act as amended by MoCRA (Public Law 117-328)'
+  },
+  functional: {
+    text: '<strong>기능성 화장품 (화장품법 제4조)</strong><br><br>한국에서 아래 기능을 표방하려면 식약처 기능성 화장품 <strong>심사·보고</strong>가 필수입니다:<br><br>• <strong>미백</strong>: 피부의 멜라닌 생성을 억제하여 피부를 밝게<br>• <strong>주름개선</strong>: 피부 주름을 완화하거나 개선<br>• <strong>자외선차단</strong>: SPF/PA 등급 표기<br>• <strong>탈모방지</strong>: 2020년부터 추가<br>• <strong>여드름 피부 완화</strong>: 2020년부터 추가<br><br>⚠️ 심사 없이 위 표현 사용 시 <strong style="color:var(--critical)">화장품법 위반</strong>으로 행정처분 대상.<br>"미백" 대신 "브라이트닝/톤업", "주름개선" 대신 "탄력 케어" 등으로 우회 가능하나, 맥락에 따라 규제 대상이 될 수 있습니다.',
+    ref: '근거: 화장품법 제4조, 시행규칙 제9조 | Rule: KR-LAB-002'
+  },
+  fontsize: {
+    text: '<strong>순함량 폰트 최소 크기 (21 CFR 701.13)</strong><br><br>PDP(Principal Display Panel) 면적에 따라 Net Quantity 폰트의 <strong>최소 높이</strong>가 정해져 있습니다:<br><br><table style="font-size:12px;width:100%;border-collapse:collapse;"><tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 0;"><strong>PDP 면적</strong></td><td><strong>최소 폰트 높이</strong></td></tr><tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 0;">≤5 sq in</td><td>1/16 in (1.6mm)</td></tr><tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 0;">≤25 sq in</td><td>1/8 in (3.2mm)</td></tr><tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 0;">≤100 sq in</td><td>3/16 in (4.8mm)</td></tr><tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 0;">≤400 sq in</td><td>1/4 in (6.4mm)</td></tr><tr><td style="padding:4px 0;">>400 sq in</td><td>1/2 in (12.7mm)</td></tr></table><br>이 폰트 높이는 소문자 "o"의 높이 기준입니다.',
+    ref: '근거: 21 CFR 701.13(i) | Rule: US-LAB-006'
+  },
+  barcode: {
+    text: '<strong>바코드 규격 (GS1 General Specifications)</strong><br><br>화장품 패키지의 바코드는 GS1 표준을 따라야 합니다:<br><br>• <strong>최소 배율</strong>: GS1 표준 크기의 80% 이상<br>• <strong>최대 배율</strong>: 200%<br>• <strong>Quiet Zone</strong>: 바코드 좌우에 최소 여백 확보<br>• <strong>명암비</strong>: 충분한 대비 필요 (검정 바, 흰색 배경 권장)<br>• <strong>인쇄 품질</strong>: ISO/IEC 15416 기준 Grade C 이상<br><br>⚠️ 배율이 80% 미만이면 스캐너 인식 실패 위험이 있습니다.',
+    ref: '근거: GS1 General Specifications Section 5 | Rule: US-LAB-007'
+  },
+  warning: {
+    text: '<strong>경고문/주의사항 규정</strong><br><br>🇺🇸 <strong>FDA (21 CFR 740)</strong>:<br>• "For external use only" — 외용 전용 제품 필수<br>• "Avoid contact with eyes" — 눈 접촉 주의<br>• AHA 제품: Sunburn Alert 필수 (US-LAB-005)<br>• 경고문 폰트도 최소 크기 규정 적용 (US-LAB-008)<br><br>🇰🇷 <strong>식약처</strong>:<br>• 사용 시 주의사항 필수 표기<br>• 알레르기 유발 성분 별도 경고<br>• 어린이 사용 제한 제품 경고문<br><br>경고문은 소비자가 쉽게 읽을 수 있는 크기와 위치에 배치해야 합니다.',
+    ref: '근거: 21 CFR 740, 화장품법 시행규칙 제19조 | Rule: US-LAB-005, US-LAB-008'
   },
 };
 
+// Topic keyword mapping — order matters (first match wins)
+const CHAT_TOPICS = [
+  { key: 'drug',       keywords: ['drug', 'claim', '치료', '재생', 'prevent', 'cure', 'treat', 'heal', '의약품', '금지 표현', '허용 표현', 'cosmetic claim'] },
+  { key: 'aha',        keywords: ['aha', 'alpha hydroxy', 'glycolic', 'lactic acid', 'sunburn alert'] },
+  { key: 'whitening',  keywords: ['whitening', '미백', 'brightening', 'lightening', '화이트닝'] },
+  { key: 'antiaging',  keywords: ['anti-aging', 'antiaging', 'anti aging', '주름', '안티에이징', 'wrinkle', 'aging', '노화'] },
+  { key: 'functional', keywords: ['기능성', '기능성 화장품', '심사', '보고', '탈모', '여드름'] },
+  { key: 'mocra',      keywords: ['mocra', '시설 등록', '이상반응', 'gmp'] },
+  { key: 'oz',         keywords: ['oz', 'fl oz', '순함량', 'net wt', 'net quantity', '단위', '변환'] },
+  { key: 'fontsize',   keywords: ['폰트', 'font', 'pdp', '면적', '최소 크기', '높이'] },
+  { key: 'barcode',    keywords: ['바코드', 'barcode', 'gs1', '배율', 'quiet zone'] },
+  { key: 'inci',       keywords: ['inci', '성분', 'ingredient', 'glycerin', '함량순', '성분표'] },
+  { key: 'address',    keywords: ['주소', 'address', 'distributor', '유통사', '제조사', 'zip'] },
+  { key: 'warning',    keywords: ['경고문', 'warning', '주의사항', 'external use', '경고'] },
+];
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Match issue by number reference (e.g., "1번", "2번 항목", "#3")
+function matchIssueReference(msg) {
+  const numMatch = msg.match(/(\d+)\s*번|#(\d+)/);
+  if (!numMatch) return null;
+  const num = parseInt(numMatch[1] || numMatch[2]);
+  const issue = ISSUES.find(i => i.id === num);
+  if (!issue) return null;
+
+  const typeLabel = { critical: '🔴 수정 필수', warning: '🟡 확인 필요', safe: '🟢 안전' };
+  const statusLabel = typeLabel[issue.type] || issue.type;
+
+  let text = `<strong>${issue.id}번: ${issue.title}</strong><br>상태: ${statusLabel}<br><br>`;
+  if (issue.location) text += `<strong>위치:</strong> ${issue.location}<br>`;
+  if (issue.current) text += `<strong>현재:</strong> <code style="background:var(--bg-subtle);border:1px solid var(--border);padding:1px 6px;border-radius:3px;font-size:11.5px;">${issue.current}</code><br>`;
+  if (issue.fix) text += `<br><strong>수정안:</strong> ${issue.fix}<br>`;
+  if (issue.assignee) text += `<br>👤 담당: ${issue.assignee}`;
+
+  return {
+    text: text,
+    ref: issue.rule ? `규칙: ${issue.rule}` : ''
+  };
+}
+
 function matchChatResponse(msg) {
   const lower = msg.toLowerCase();
-  if (lower.includes('drug') || lower.includes('claim') || lower.includes('치료') || lower.includes('재생') || lower.includes('prevent') || lower.includes('cure'))
-    return CHAT_RESPONSES['drug'];
-  if (lower.includes('aha') || lower.includes('경고문') || lower.includes('alpha hydroxy') || lower.includes('선번'))
-    return CHAT_RESPONSES['aha'];
-  if (lower.includes('whitening') || lower.includes('미백') || lower.includes('brightening'))
-    return CHAT_RESPONSES['whitening'];
-  if (lower.includes('anti-aging') || lower.includes('antiaging') || lower.includes('anti aging') || lower.includes('주름'))
-    return CHAT_RESPONSES['antiaging'];
-  if (lower.includes('oz') || lower.includes('순함량') || lower.includes('net') || lower.includes('quantity') || lower.includes('fl oz'))
-    return CHAT_RESPONSES['oz'];
-  if (lower.includes('inci') || lower.includes('성분') || lower.includes('ingredient') || lower.includes('glycerin'))
-    return CHAT_RESPONSES['inci'];
-  if (lower.includes('주소') || lower.includes('address') || lower.includes('distributor') || lower.includes('유통사') || lower.includes('제조사'))
-    return CHAT_RESPONSES['address'];
+
+  // 1. Check for issue number reference
+  const issueRef = matchIssueReference(msg);
+  if (issueRef) return issueRef;
+
+  // 2. Topic keyword matching
+  for (const topic of CHAT_TOPICS) {
+    if (topic.keywords.some(kw => lower.includes(kw))) {
+      return CHAT_RESPONSES[topic.key];
+    }
+  }
+
   return CHAT_RESPONSES.default;
 }
 
 function sendChat() {
-  const input    = document.getElementById('chatInput');
-  const msg      = input.value.trim();
-  if (!msg) return;
+  const input = document.getElementById('chatInput');
+  const rawMsg = input.value.trim();
+  if (!rawMsg) return;
 
+  const safeMsg = escapeHtml(rawMsg);
   const messages = document.getElementById('chatMessages');
   messages.innerHTML += `
     <div class="chat-msg user">
       <div class="chat-avatar user">👤</div>
-      <div class="chat-bubble">${msg}</div>
+      <div class="chat-bubble">${safeMsg}</div>
     </div>`;
   input.value = '';
 
-  // Scroll to bottom
   const body = document.getElementById('chatbotBody');
   body.scrollTop = body.scrollHeight;
 
-  // Show typing indicator
   const typingId = 'typing-' + Date.now();
   messages.innerHTML += `
     <div class="chat-msg bot" id="${typingId}">
@@ -444,7 +507,7 @@ function sendChat() {
     </div>`;
   body.scrollTop = body.scrollHeight;
 
-  const resp = matchChatResponse(msg);
+  const resp = matchChatResponse(rawMsg);
   setTimeout(() => {
     const typingEl = document.getElementById(typingId);
     if (typingEl) typingEl.remove();
