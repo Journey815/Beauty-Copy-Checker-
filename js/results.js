@@ -507,6 +507,57 @@ function updateMetadata() {
   }
 }
 
+// ─── Action Items Table (dynamic) ─────────────────────────────
+function renderActionTable() {
+  const tbody = document.getElementById('actionTableBody');
+  const summaryEl = document.getElementById('actionSummaryText');
+  if (!tbody) return;
+
+  // Only show actionable issues (critical + warning)
+  const actionable = ISSUES.filter(i => i.type === 'critical' || i.type === 'warning');
+
+  if (actionable.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-muted);">수정이 필요한 항목이 없습니다.</td></tr>';
+    if (summaryEl) summaryEl.textContent = '이슈 없음';
+    return;
+  }
+
+  // Group by assignee
+  const groups = {};
+  for (const issue of actionable) {
+    const assignee = issue.assignee || '미지정';
+    if (!groups[assignee]) groups[assignee] = [];
+    groups[assignee].push(issue);
+  }
+
+  const typeIcon = { critical: '●', warning: '▲' };
+  const typeColor = { critical: 'var(--critical)', warning: 'var(--warning)' };
+  const typeBadge = { critical: '<span class="badge badge-critical">수정 필수</span>', warning: '<span class="badge badge-warning">확인 필요</span>' };
+
+  let html = '';
+  for (const [assignee, issues] of Object.entries(groups)) {
+    issues.forEach((issue, idx) => {
+      html += '<tr>';
+      if (idx === 0) {
+        html += `<td rowspan="${issues.length}"><span class="assignee-badge">${assignee}</span></td>`;
+      }
+      const icon = typeIcon[issue.type] || '';
+      const color = typeColor[issue.type] || 'var(--text)';
+      const shortTitle = issue.title.length > 50 ? issue.title.substring(0, 50) + '...' : issue.title;
+      html += `<td><span style="color:${color};font-weight:600;">${icon}${issue.id}</span> ${shortTitle}</td>`;
+      html += `<td>${typeBadge[issue.type] || ''}</td>`;
+      const shortFix = issue.fix.length > 60 ? issue.fix.substring(0, 60) + '...' : issue.fix;
+      html += `<td style="font-size:12.5px;color:var(--text-muted);">${shortFix}</td>`;
+      html += '</tr>';
+    });
+  }
+
+  tbody.innerHTML = html;
+
+  const assigneeCount = Object.keys(groups).length;
+  if (summaryEl) summaryEl.textContent = `총 ${actionable.length}건 · 담당 ${assigneeCount}그룹`;
+}
+
 // ─── Load uploaded label image ────────────────────────────────
 function loadUploadedImage() {
   try {
@@ -529,6 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMetadata();
   updateStatCounts();
   renderIssues();
+  renderActionTable();
 
   // Position pins: try now, retry when image loads (handles both cached and fresh SVG)
   const img = document.getElementById('labelImg');
